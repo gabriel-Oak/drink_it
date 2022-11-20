@@ -1,0 +1,35 @@
+name: drink_it
+description: A new Flutter project for getting drinks and its recipes.
+
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.4 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  dartz: ^0.10.1
+  flutter_bloc: ^8.1.1
+  equatable: ^2.0.5
+  flutter_modular: ^5.0.3
+  data_connection_checker: ^0.3.4
+  dio: ^4.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+  mockito: ^5.3.2
+  build_runner: ^2.3.2
+
+
+
+flutter:
+
+  uses-material-design: true
+
