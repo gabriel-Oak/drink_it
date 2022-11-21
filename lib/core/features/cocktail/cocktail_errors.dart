@@ -14,5 +14,6 @@ class InvalidSearchError extends FailureGetCocktails {
 }
 
 class DatasourceError extends FailureGetCocktails {
-  DatasourceError({super.message});
+  final String? metadata;
+  DatasourceError({this.metadata, super.message});
 }
