@@ -1,3 +1,18 @@
-abstract class FailureGetIngredients implements Exception {}
+abstract class FailureGetCocktails implements Exception {
+  final String? message;
 
-class InvalidSearchError extends FailureGetIngredients {}
+  FailureGetCocktails({this.message});
+
+  @override
+  String toString() {
+    return message ?? super.toString();
+  }
+}
+
+class InvalidSearchError extends FailureGetCocktails {
+  InvalidSearchError() : super();
+}
+
+class DatasourceError extends FailureGetCocktails {
+  DatasourceError({super.message});
+}

@@ -6,9 +6,9 @@ class CocktailItemModel extends CocktailItem {
 
   static CocktailItemModel fromMap(Map<String, dynamic> map) {
     return CocktailItemModel(
-      id: map['id'],
-      name: map['name'],
-      thumb: map['thumb'],
+      id: map['idDrink'],
+      name: map['strDrink'],
+      thumb: map['strDrinkThumb'],
     );
   }
 

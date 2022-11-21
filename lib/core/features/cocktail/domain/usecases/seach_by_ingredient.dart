@@ -4,7 +4,7 @@ import 'package:drink_it/core/features/cocktail/domain/entities/cocktail_item.da
 import 'package:drink_it/core/features/cocktail/domain/repositories/cocktail_repository.dart';
 
 abstract class SearchByIngredients {
-  Future<Either<FailureGetIngredients, List<CocktailItem>>> call(
+  Future<Either<FailureGetCocktails, List<CocktailItem>>> call(
     String ingredientName,
   );
 }
@@ -15,7 +15,7 @@ class SearchByIngredientsImpl extends SearchByIngredients {
   SearchByIngredientsImpl({required this.cocktailRepository});
 
   @override
-  Future<Either<FailureGetIngredients, List<CocktailItem>>> call(
+  Future<Either<FailureGetCocktails, List<CocktailItem>>> call(
     String ingredientName,
   ) async {
     if (ingredientName.isEmpty) {
