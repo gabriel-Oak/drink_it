@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:drink_it/core/db/db.dart';
+import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,7 +19,7 @@ void main() {
   final database = MockDatabase();
   final datasource = CocktailLocalDatasourceImpl(db: db);
 
-  test('Should get List<CokctailItemModel> from database', () async {
+  test('Should get List<CokctailItemModel> from database by vodka', () async {
     final FutureOr<List<Map<String, Object?>>> mock =
         Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
       return e as Map<String, Object?>;
@@ -37,5 +38,53 @@ void main() {
 
     final results = await datasource.getCocktails(ingredient: 'vodka');
     expect(results, isA<List<CocktailItem>>());
+  });
+
+  test('Should get List<CokctailItemModel> from database by beer', () async {
+    final FutureOr<List<Map<String, Object?>>> mock =
+        Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
+      return e as Map<String, Object?>;
+    }).toList());
+
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.query(
+      'cocktails',
+      columns: [
+        'idDrink',
+        'strDrink',
+        'strDrinkThumb',
+      ],
+      where: 'WHERE LOWER(strCategory) = LOWER(beer)',
+    )).thenAnswer((_) async => mock);
+
+    final results = await datasource.getCocktails(category: 'beer');
+    expect(results, isA<List<CocktailItem>>());
+  });
+
+  test('Should get List<CokctailItemModel> from database by alcoholic',
+      () async {
+    final FutureOr<List<Map<String, Object?>>> mock =
+        Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
+      return e as Map<String, Object?>;
+    }).toList());
+
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.query(
+      'cocktails',
+      columns: [
+        'idDrink',
+        'strDrink',
+        'strDrinkThumb',
+      ],
+      where: 'WHERE LOWER(strAlcoholic) = LOWER(alcoholic)',
+    )).thenAnswer((_) async => mock);
+
+    final results = await datasource.getCocktails(alcoholic: 'alcoholic');
+    expect(results, isA<List<CocktailItem>>());
+  });
+
+  test('Should throw when no filter', () async {
+    final results = datasource.getCocktails();
+    expect(results, throwsA(isA<DatasourceError>()));
   });
 }

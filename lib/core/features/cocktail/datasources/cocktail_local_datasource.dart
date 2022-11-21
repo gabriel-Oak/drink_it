@@ -26,9 +26,9 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
       if (ingredient != null) {
         query = 'WHERE LOWER(strIngredient1) LIKE LOWER(\'%$ingredient%\')';
       } else if (category != null) {
-        query = 'WHERE strCategory = $category';
+        query = 'WHERE LOWER(strCategory) = LOWER($category)';
       } else if (alcoholic != null) {
-        query = 'WHERE strAlcoholic = $alcoholic';
+        query = 'WHERE LOWER(strAlcoholic) = LOWER($alcoholic)';
       } else {
         throw DatasourceError(message: 'Oops, you need to specify a filter!');
       }

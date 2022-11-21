@@ -31,6 +31,37 @@ void main() {
     expect(results[0].id, '15346');
   });
 
+  test('Should get cocktails by alcoholic and return List<CokctailItemModel>',
+      () async {
+    when(client.get('filter.php', queryParameters: {'a': 'alcoholic'}))
+        .thenAnswer(
+      (_) async => Response(
+        data: jsonDecode(cocktailsListMock),
+        statusCode: 200,
+        requestOptions: RequestOptions(path: ''),
+      ),
+    );
+
+    final results = await datasource.getCocktails(alcoholic: 'alcoholic');
+    expect(results, isA<List<CocktailItem>>());
+    expect(results[0].id, '15346');
+  });
+
+  test('Should get cocktails by beer and return List<CokctailItemModel>',
+      () async {
+    when(client.get('filter.php', queryParameters: {'c': 'beer'})).thenAnswer(
+      (_) async => Response(
+        data: jsonDecode(cocktailsListMock),
+        statusCode: 200,
+        requestOptions: RequestOptions(path: ''),
+      ),
+    );
+
+    final results = await datasource.getCocktails(category: 'beer');
+    expect(results, isA<List<CocktailItem>>());
+    expect(results[0].id, '15346');
+  });
+
   test('Should deal with http error', () async {
     when(client.get('filter.php', queryParameters: {'i': 'vodka'})).thenAnswer(
       (_) async => Response(
@@ -42,5 +73,10 @@ void main() {
 
     final future = datasource.getCocktails(ingredient: 'vodka');
     expect(future, throwsA(isA<DatasourceError>()));
+  });
+
+  test('Should throw when no filter', () async {
+    final results = datasource.getCocktails();
+    expect(results, throwsA(isA<DatasourceError>()));
   });
 }
