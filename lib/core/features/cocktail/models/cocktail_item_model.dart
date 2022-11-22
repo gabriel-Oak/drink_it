@@ -3,7 +3,11 @@ class CocktailItem {
   final String name;
   final String thumb;
 
-  CocktailItem({required this.id, required this.name, required this.thumb});
+  CocktailItem({
+    required this.id,
+    required this.name,
+    required this.thumb,
+  });
 
   static CocktailItem fromMap(Map<String, dynamic> map) {
     return CocktailItem(

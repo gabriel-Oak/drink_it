@@ -1,8 +1,11 @@
 import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 
 abstract class CocktailLocalDatasource {
+  Future<Cocktail> getDetails(String id);
+  Future<int> save(Cocktail cocktail);
   Future<List<CocktailItem>> getCocktails({
     String? ingredient,
     String? category,
@@ -52,5 +55,17 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
           message:
               'Sorry, something wen wrong searching for your cocktails, stay sober :(');
     }
+  }
+
+  @override
+  Future<Cocktail> getDetails(String id) {
+    // TODO: implement getDetails
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> save(Cocktail cocktail) {
+    // TODO: implement save
+    throw UnimplementedError();
   }
 }

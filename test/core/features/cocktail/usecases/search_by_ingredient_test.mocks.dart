@@ -3,15 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart'
-    as _i5;
+    as _i6;
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart'
-    as _i2;
+    as _i3;
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart'
-    as _i4;
-import 'package:drink_it/core/utils/network_info.dart' as _i6;
+    as _i5;
+import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart'
+    as _i2;
+import 'package:drink_it/core/utils/network_info.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -25,17 +27,49 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeCocktail_0 extends _i1.SmartFake implements _i2.Cocktail {
+  _FakeCocktail_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [CocktailLocalDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCocktailLocalDatasource extends _i1.Mock
-    implements _i2.CocktailLocalDatasource {
+    implements _i3.CocktailLocalDatasource {
   MockCocktailLocalDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.CocktailItem>> getCocktails({
+  _i4.Future<_i2.Cocktail> getDetails(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getDetails,
+          [id],
+        ),
+        returnValue: _i4.Future<_i2.Cocktail>.value(_FakeCocktail_0(
+          this,
+          Invocation.method(
+            #getDetails,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cocktail>);
+  @override
+  _i4.Future<int> save(_i2.Cocktail? cocktail) => (super.noSuchMethod(
+        Invocation.method(
+          #save,
+          [cocktail],
+        ),
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
+  @override
+  _i4.Future<List<_i5.CocktailItem>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
@@ -51,21 +85,35 @@ class MockCocktailLocalDatasource extends _i1.Mock
           },
         ),
         returnValue:
-            _i3.Future<List<_i4.CocktailItem>>.value(<_i4.CocktailItem>[]),
-      ) as _i3.Future<List<_i4.CocktailItem>>);
+            _i4.Future<List<_i5.CocktailItem>>.value(<_i5.CocktailItem>[]),
+      ) as _i4.Future<List<_i5.CocktailItem>>);
 }
 
 /// A class which mocks [CocktailExternalDatasource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCocktailExternalDatasource extends _i1.Mock
-    implements _i5.CocktailExternalDatasource {
+    implements _i6.CocktailExternalDatasource {
   MockCocktailExternalDatasource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.CocktailItem>> getCocktails({
+  _i4.Future<_i2.Cocktail> getDetails(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getDetails,
+          [id],
+        ),
+        returnValue: _i4.Future<_i2.Cocktail>.value(_FakeCocktail_0(
+          this,
+          Invocation.method(
+            #getDetails,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cocktail>);
+  @override
+  _i4.Future<List<_i5.CocktailItem>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
@@ -81,21 +129,21 @@ class MockCocktailExternalDatasource extends _i1.Mock
           },
         ),
         returnValue:
-            _i3.Future<List<_i4.CocktailItem>>.value(<_i4.CocktailItem>[]),
-      ) as _i3.Future<List<_i4.CocktailItem>>);
+            _i4.Future<List<_i5.CocktailItem>>.value(<_i5.CocktailItem>[]),
+      ) as _i4.Future<List<_i5.CocktailItem>>);
 }
 
 /// A class which mocks [NetworkInfo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNetworkInfo extends _i1.Mock implements _i6.NetworkInfo {
+class MockNetworkInfo extends _i1.Mock implements _i7.NetworkInfo {
   MockNetworkInfo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<bool> get isConnected => (super.noSuchMethod(
+  _i4.Future<bool> get isConnected => (super.noSuchMethod(
         Invocation.getter(#isConnected),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
