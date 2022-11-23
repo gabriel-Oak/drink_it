@@ -13,6 +13,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../cocktails_list_mocks.dart';
+import '../cocktails_search_mocks.dart';
 import 'cocktail_local_datasource_test.mocks.dart';
 
 @GenerateMocks([Database, Db])
@@ -91,32 +92,64 @@ void main() {
   });
 
   test('Should return a cocktail', () async {
-    final FutureOr<List<Map<String, Object?>>> mock = Future.value(
-        (jsonDecode(cocktailsListMock)['drinks'] as List)
+    final FutureOr<List<Map<String, Object?>>> mock =
+        (jsonDecode(cocktailsSearchMock)['drinks'] as List)
             .sublist(0, 1)
             .map((e) {
       return e as Map<String, Object?>;
-    }).toList());
+    }).toList();
 
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
       'cocktails',
       columns: cocktailsColumns,
-      where: 'WHERE idDrink = 11118',
+      where: 'WHERE idDrink = ?',
+      whereArgs: ['11118'],
     )).thenAnswer((_) async => mock);
 
     final results = await datasource.getDetails('11118');
     expect(results, isA<Cocktail>());
   });
 
-  test('Should save a cocktail in database', () async {
+  test('Should not return a cocktail', () async {
+    final List<Map<String, Object?>> mock = [];
     when(db.get()).thenAnswer((_) async => database);
-    // when(database.)
+    when(database.query(
+      'cocktails',
+      columns: cocktailsColumns,
+      where: 'WHERE idDrink = ?',
+      whereArgs: ['11118'],
+    )).thenAnswer((_) async => mock);
 
+    final results = datasource.getDetails('11118');
+    expect(results, throwsA(isA<DatasourceError>()));
+  });
+
+  test('Should save a cocktail in database', () async {
     final cocktail = Cocktail.fromMap(
-      (jsonDecode(cocktailsListMock) as List<Map<String, dynamic>>).first,
-    );
+        (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.insert(
+      'cocktail',
+      cocktail.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    )).thenAnswer((_) async => 1);
+
     final result = await datasource.save(cocktail);
     expect(result, 1);
+  });
+
+  test('Should deal with error saving a cocktail in database', () async {
+    final cocktail = Cocktail.fromMap(
+        (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.insert(
+      'cocktail',
+      cocktail.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    )).thenThrow((_) async => Exception());
+
+    final result = datasource.save(cocktail);
+    expect(result, throwsA(isA<DatasourceError>()));
   });
 }

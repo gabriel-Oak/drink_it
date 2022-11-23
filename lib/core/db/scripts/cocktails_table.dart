@@ -1,11 +1,9 @@
 final cocktailsColumns = [
   "idDrink",
   "strDrink",
-  "strDrinkAlternate",
   "strTags",
   "strVideo",
   "strCategory",
-  "strIBA",
   "strAlcoholic",
   "strGlass",
   "strInstructions",
@@ -13,8 +11,6 @@ final cocktailsColumns = [
   "strInstructionsDE",
   "strInstructionsFR",
   "strInstructionsIT",
-  "strInstructionsZH-HANS",
-  "strInstructionsZH-HANT",
   "strDrinkThumb",
   "strIngredient1",
   "strIngredient2",
@@ -46,9 +42,6 @@ final cocktailsColumns = [
   "strMeasure13",
   "strMeasure14",
   "strMeasure15",
-  "strImageSource",
-  "strImageAttribution",
-  "strCreativeCommonsConfirmed",
   "dateModified",
 ];
 
@@ -56,7 +49,6 @@ const cocktailsTable = """
   CREATE TABLE cocktails(
     idDrink TEXT UNIQUE,
     strDrink TEXT,
-    strDrinkAlternate TEXT,
     strTags TEXT,
     strVideo TEXT,
     strCategory TEXT,

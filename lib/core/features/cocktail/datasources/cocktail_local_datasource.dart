@@ -1,7 +1,9 @@
 import 'package:drink_it/core/db/db.dart';
+import 'package:drink_it/core/db/scripts/cocktails_table.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class CocktailLocalDatasource {
   Future<Cocktail> getDetails(String id);
@@ -58,14 +60,42 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
   }
 
   @override
-  Future<Cocktail> getDetails(String id) {
-    // TODO: implement getDetails
-    throw UnimplementedError();
+  Future<Cocktail> getDetails(String id) async {
+    try {
+      final database = await db.get();
+
+      final result = await database.query(
+        'cocktails',
+        columns: cocktailsColumns,
+        where: 'WHERE idDrink = ?',
+        whereArgs: [id],
+      );
+      if (result.isEmpty) throw DatasourceError();
+      return Cocktail.fromMap(result.first);
+    } catch (e) {
+      throw DatasourceError(
+          metadata: e.toString(),
+          message:
+              'Sorry, something went wrong saving the cocktail locally :/');
+    }
   }
 
   @override
-  Future<int> save(Cocktail cocktail) {
-    // TODO: implement save
-    throw UnimplementedError();
+  Future<int> save(Cocktail cocktail) async {
+    try {
+      final database = await db.get();
+      final result = await database.insert(
+        'cocktail',
+        cocktail.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return result;
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(
+          metadata: e.toString(),
+          message: 'Sorry, it wasn\'t possible to find your cocktail :/');
+    }
   }
 }

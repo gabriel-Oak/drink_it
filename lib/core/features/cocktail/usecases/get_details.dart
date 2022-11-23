@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
@@ -37,7 +39,7 @@ class GetDetailImpl extends GetDetails {
         final details = await externalDatasource.getDetails(cocktailId);
 
         try {
-          localDatasource.save(details).catchError(print);
+          localDatasource.save(details);
         } catch (e) {
           print(e.toString());
         }

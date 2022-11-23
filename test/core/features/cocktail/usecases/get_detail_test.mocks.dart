@@ -194,31 +194,6 @@ class MockCocktail extends _i1.Mock implements _i2.Cocktail {
         returnValue: '',
       ) as String);
   @override
-  String get instructions => (super.noSuchMethod(
-        Invocation.getter(#instructions),
-        returnValue: '',
-      ) as String);
-  @override
-  String get instructionsES => (super.noSuchMethod(
-        Invocation.getter(#instructionsES),
-        returnValue: '',
-      ) as String);
-  @override
-  String get instructionsDE => (super.noSuchMethod(
-        Invocation.getter(#instructionsDE),
-        returnValue: '',
-      ) as String);
-  @override
-  String get instructionsFR => (super.noSuchMethod(
-        Invocation.getter(#instructionsFR),
-        returnValue: '',
-      ) as String);
-  @override
-  String get instructionsIT => (super.noSuchMethod(
-        Invocation.getter(#instructionsIT),
-        returnValue: '',
-      ) as String);
-  @override
   List<_i8.Ingredient> get ingredients => (super.noSuchMethod(
         Invocation.getter(#ingredients),
         returnValue: <_i8.Ingredient>[],

@@ -28,7 +28,7 @@ void main() {
     network: network,
   );
 
-  test('Should get a cocktail details localy', () async {
+  test('Should get a cocktail details locally', () async {
     when(localDatasource.getDetails('73478')).thenAnswer((_) async => cocktail);
 
     final result = await usecase('73478');
