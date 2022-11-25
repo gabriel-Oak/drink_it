@@ -31,6 +31,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(Loaded(
           list: response,
           cocktailsInfo: const {},
+          searchMode: SearchMode.ingredients,
+        ));
+        _getDetails(response);
+      } else {
+        emit(ErrorState(response.toString()));
+      }
+    });
+
+    on<SearchByCategoryEvent>((event, emit) async {
+      emit(LoadingList());
+      final response = (await searchByIngredient(event.category)).fold(id, id);
+      if (response is List<CocktailItem>) {
+        emit(Loaded(
+          list: response,
+          cocktailsInfo: const {},
+          searchMode: SearchMode.category,
         ));
         _getDetails(response);
       } else {
@@ -39,7 +55,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
-  _getDetails(List<CocktailItem> items) async {
+  _getDetails(
+    List<CocktailItem> items,
+  ) async {
     final Map<String, bool?> loadings = {};
     for (var element in items) {
       loadings[element.id] = true;

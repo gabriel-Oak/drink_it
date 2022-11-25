@@ -34,13 +34,6 @@ void main() {
   final searchByCategory = MockSearchByCategory();
   final getDetails = MockGetDetails();
 
-  // final bloc = HomeBloc(
-  //   getDetails: getDetails,
-  //   searchByAlcoholic: searchByAlcoholic,
-  //   searchByCategory: searchByCategory,
-  //   searchByIngredient: searchByIngredients,
-  // );
-
   group('CounterBloc', () {
     late HomeBloc bloc;
 
@@ -63,7 +56,7 @@ void main() {
     });
 
     blocTest<HomeBloc, HomeState>(
-      'emits should search by ingredients',
+      'Should search by ingredients',
       build: () => bloc,
       act: (bloc) => bloc.add(SearchByIngredientEvent('vodka')),
       expect: () => [
@@ -72,16 +65,46 @@ void main() {
           list: cocktailsList,
           cocktailsInfo: const {},
           loadingInfo: const {},
+          searchMode: SearchMode.ingredients,
         ),
         Loaded(
           list: cocktailsList,
           cocktailsInfo: const {},
           loadingInfo: const {'11007': true},
+          searchMode: SearchMode.ingredients,
         ),
         Loaded(
           list: cocktailsList,
           cocktailsInfo: {'11007': cocktailInfo},
           loadingInfo: const {'11007': false},
+          searchMode: SearchMode.ingredients,
+        ),
+      ],
+    );
+
+    blocTest<HomeBloc, HomeState>(
+      'Should search by category',
+      build: () => bloc,
+      act: (bloc) => bloc.add(SearchByCategoryEvent('vodka')),
+      expect: () => [
+        LoadingList(),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: const {},
+          loadingInfo: const {},
+          searchMode: SearchMode.category,
+        ),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: const {},
+          loadingInfo: const {'11007': true},
+          searchMode: SearchMode.category,
+        ),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: {'11007': cocktailInfo},
+          loadingInfo: const {'11007': false},
+          searchMode: SearchMode.category,
         ),
       ],
     );
