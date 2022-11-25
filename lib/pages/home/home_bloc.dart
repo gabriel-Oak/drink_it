@@ -41,7 +41,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<SearchByCategoryEvent>((event, emit) async {
       emit(LoadingList());
-      final response = (await searchByIngredient(event.category)).fold(id, id);
+      final response = (await searchByCategory(event.category)).fold(id, id);
+      if (response is List<CocktailItem>) {
+        emit(Loaded(
+          list: response,
+          cocktailsInfo: const {},
+          searchMode: SearchMode.category,
+        ));
+        _getDetails(response);
+      } else {
+        emit(ErrorState(response.toString()));
+      }
+    });
+
+    on<SearchByAlcoholicEvent>((event, emit) async {
+      emit(LoadingList());
+      final response = (await searchByAlcoholic(event.alcoholic)).fold(id, id);
       if (response is List<CocktailItem>) {
         emit(Loaded(
           list: response,

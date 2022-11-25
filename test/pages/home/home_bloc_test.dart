@@ -40,6 +40,10 @@ void main() {
     setUp(() {
       when(searchByIngredients.call('vodka'))
           .thenAnswer((_) async => Right(cocktailsList));
+      when(searchByCategory.call('beer'))
+          .thenAnswer((_) async => Right(cocktailsList));
+      when(searchByAlcoholic.call('alcoholic'))
+          .thenAnswer((_) async => Right(cocktailsList));
       when(getDetails.call('11007'))
           .thenAnswer((_) async => Right(cocktailInfo));
 
@@ -85,7 +89,7 @@ void main() {
     blocTest<HomeBloc, HomeState>(
       'Should search by category',
       build: () => bloc,
-      act: (bloc) => bloc.add(SearchByCategoryEvent('vodka')),
+      act: (bloc) => bloc.add(SearchByCategoryEvent('beer')),
       expect: () => [
         LoadingList(),
         Loaded(
@@ -105,6 +109,33 @@ void main() {
           cocktailsInfo: {'11007': cocktailInfo},
           loadingInfo: const {'11007': false},
           searchMode: SearchMode.category,
+        ),
+      ],
+    );
+
+    blocTest<HomeBloc, HomeState>(
+      'Should search by alcoholic',
+      build: () => bloc,
+      act: (bloc) => bloc.add(SearchByAlcoholicEvent('alcoholic')),
+      expect: () => [
+        LoadingList(),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: const {},
+          loadingInfo: const {},
+          searchMode: SearchMode.alcoholic,
+        ),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: const {},
+          loadingInfo: const {'11007': true},
+          searchMode: SearchMode.alcoholic,
+        ),
+        Loaded(
+          list: cocktailsList,
+          cocktailsInfo: {'11007': cocktailInfo},
+          loadingInfo: const {'11007': false},
+          searchMode: SearchMode.alcoholic,
         ),
       ],
     );
