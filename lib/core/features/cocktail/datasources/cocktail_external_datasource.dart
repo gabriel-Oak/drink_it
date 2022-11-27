@@ -12,10 +12,10 @@ abstract class CocktailExternalDatasource {
   });
 }
 
-class CocktailDatasourceImpl extends CocktailExternalDatasource {
+class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
   final Dio client;
 
-  CocktailDatasourceImpl({
+  CocktailExternallDatasourceImpl({
     required this.client,
   });
 

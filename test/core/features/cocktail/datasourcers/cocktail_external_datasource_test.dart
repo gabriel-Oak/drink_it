@@ -16,7 +16,7 @@ import 'cocktail_external_datasource_test.mocks.dart';
 @GenerateMocks([Dio])
 void main() {
   final client = MockDio();
-  final datasource = CocktailDatasourceImpl(client: client);
+  final datasource = CocktailExternallDatasourceImpl(client: client);
 
   test('Should get cocktails by vodka and return List<CokctailItemModel>',
       () async {
