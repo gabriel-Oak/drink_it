@@ -5,7 +5,7 @@ class Cocktail {
   final String name;
   final String? video;
   final String thumb;
-  final String tags;
+  final String? tags;
   final String category;
   final String alcoholic;
   final String glass;
@@ -15,24 +15,24 @@ class Cocktail {
   final String? instructionsFR;
   final String? instructionsIT;
   final List<Ingredient> ingredients;
-  final String dateModified;
+  final String? dateModified;
 
   Cocktail({
     required this.id,
     required this.name,
     required this.thumb,
-    required this.tags,
     required this.category,
     required this.alcoholic,
     required this.glass,
     this.video,
+    this.tags,
     this.instructions,
     this.instructionsES,
     this.instructionsDE,
     this.instructionsFR,
     this.instructionsIT,
+    this.dateModified,
     required this.ingredients,
-    required this.dateModified,
   });
 
   static Cocktail fromMap(Map<String, dynamic> map) {

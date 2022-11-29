@@ -60,8 +60,6 @@ const cocktailsTable = """
     strInstructionsDE TEXT,
     strInstructionsFR TEXT,
     strInstructionsIT TEXT,
-    strInstructionsZH-HANS TEXT,
-    strInstructionsZH-HANT TEXT,
     strDrinkThumb TEXT,
     strIngredient1 TEXT,
     strIngredient2 TEXT,
@@ -96,6 +94,6 @@ const cocktailsTable = """
     strImageSource TEXT,
     strImageAttribution TEXT,
     strCreativeCommonsConfirmed TEXT,
-    dateModified TEXT,
+    dateModified TEXT
   );
 """;

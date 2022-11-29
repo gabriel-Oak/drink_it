@@ -29,11 +29,11 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
     try {
       String query;
       if (ingredient != null) {
-        query = 'WHERE LOWER(strIngredient1) LIKE LOWER(\'%$ingredient%\')';
+        query = 'LOWER(strIngredient1) LIKE LOWER(\'%$ingredient%\')';
       } else if (category != null) {
-        query = 'WHERE LOWER(strCategory) = LOWER($category)';
+        query = 'LOWER(strCategory) = LOWER($category)';
       } else if (alcoholic != null) {
-        query = 'WHERE LOWER(strAlcoholic) = LOWER($alcoholic)';
+        query = 'LOWER(strAlcoholic) = LOWER($alcoholic)';
       } else {
         throw DatasourceError(message: 'Oops, you need to specify a filter!');
       }
@@ -67,7 +67,7 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
       final result = await database.query(
         'cocktails',
         columns: cocktailsColumns,
-        where: 'WHERE idDrink = ?',
+        where: 'idDrink = ?',
         whereArgs: [id],
       );
       if (result.isEmpty) throw DatasourceError();
@@ -85,7 +85,7 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
     try {
       final database = await db.get();
       final result = await database.insert(
-        'cocktail',
+        'cocktails',
         cocktail.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );

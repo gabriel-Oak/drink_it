@@ -9,10 +9,6 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        print(state);
-        if (state is Loaded) {
-          print(state.list);
-        }
         return Scaffold(
           appBar: AppBar(
             title: const Text('Hello Jhon'),

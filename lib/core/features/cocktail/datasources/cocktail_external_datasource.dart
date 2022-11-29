@@ -66,7 +66,7 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
   Future<Cocktail> getDetails(String id) async {
     try {
       final response = await client.get(
-        'lookup.php',
+        '/lookup.php',
         queryParameters: {'i': id},
       );
 
