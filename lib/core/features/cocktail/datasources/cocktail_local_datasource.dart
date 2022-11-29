@@ -94,8 +94,9 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
       rethrow;
     } catch (e) {
       throw DatasourceError(
-          metadata: e.toString(),
-          message: 'Sorry, it wasn\'t possible to find your cocktail :/');
+        metadata: e.toString(),
+        message: 'Sorry, it wasn\'t possible to find your cocktail :/',
+      );
     }
   }
 }

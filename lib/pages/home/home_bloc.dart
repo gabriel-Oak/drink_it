@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, depend_on_referenced_packages, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
@@ -24,76 +25,84 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.searchByIngredient,
   }) : super((HomeState())) {
     on<SearchByIngredientEvent>((event, emit) async {
-      emit(LoadingList());
-      final response =
-          (await searchByIngredient(event.ingredient)).fold(id, id);
-      if (response is List<CocktailItem>) {
-        emit(Loaded(
-          list: response,
-          cocktailsInfo: const {},
-          searchMode: SearchMode.ingredients,
-        ));
-        _getDetails(response);
-      } else {
-        emit(ErrorState(response.toString()));
+      if (state is! LoadingList) {
+        emit(LoadingList(searchMode: SearchMode.ingredients));
+        final response =
+            (await searchByIngredient(event.ingredient)).fold(id, id);
+        if (response is List<CocktailItem>) {
+          final prevState = Loaded(
+            list: response,
+            cocktailsInfo: const {},
+            searchMode: SearchMode.ingredients,
+          );
+          emit(await _getDetails(response, prevState));
+        } else {
+          emit(ErrorState(
+            message: response.toString(),
+            searchMode: SearchMode.ingredients,
+          ));
+        }
       }
     });
 
     on<SearchByCategoryEvent>((event, emit) async {
-      emit(LoadingList());
-      final response = (await searchByCategory(event.category)).fold(id, id);
-      if (response is List<CocktailItem>) {
-        emit(Loaded(
-          list: response,
-          cocktailsInfo: const {},
-          searchMode: SearchMode.category,
-        ));
-        _getDetails(response);
-      } else {
-        emit(ErrorState(response.toString()));
+      if (state is! LoadingList) {
+        emit(LoadingList(searchMode: SearchMode.category));
+        final response = (await searchByCategory(event.category)).fold(id, id);
+        if (response is List<CocktailItem>) {
+          final prevState = Loaded(
+            list: response,
+            cocktailsInfo: const {},
+            searchMode: SearchMode.category,
+          );
+          emit(await _getDetails(response, prevState));
+        } else {
+          emit(ErrorState(
+            message: response.toString(),
+            searchMode: SearchMode.category,
+          ));
+        }
       }
     });
 
     on<SearchByAlcoholicEvent>((event, emit) async {
-      emit(LoadingList());
-      final response = (await searchByAlcoholic(event.alcoholic)).fold(id, id);
-      if (response is List<CocktailItem>) {
-        emit(Loaded(
-          list: response,
-          cocktailsInfo: const {},
-          searchMode: SearchMode.category,
-        ));
-        _getDetails(response);
-      } else {
-        emit(ErrorState(response.toString()));
+      if (state is! LoadingList) {
+        emit(LoadingList(searchMode: SearchMode.alcoholic));
+        final response =
+            (await searchByAlcoholic(event.alcoholic)).fold(id, id);
+        if (response is List<CocktailItem>) {
+          final prevState = Loaded(
+            list: response,
+            cocktailsInfo: const {},
+            searchMode: SearchMode.alcoholic,
+          );
+          emit(await _getDetails(response, prevState));
+        } else {
+          emit(ErrorState(
+              message: response.toString(), searchMode: SearchMode.alcoholic));
+        }
       }
     });
   }
 
-  _getDetails(
+  Future<Loaded> _getDetails(
     List<CocktailItem> items,
+    Loaded prevState,
   ) async {
-    final Map<String, bool?> loadings = {};
-    for (var element in items) {
-      loadings[element.id] = true;
-    }
-    emit((state as Loaded).copyWith(loadingInfo: loadings));
+    final previousLoadings = Map<String, bool?>.from(prevState.loadingInfo);
+    final previousInfos = Map<String, Cocktail>.from(prevState.cocktailsInfo);
 
     for (var element in items) {
       final response = (await getDetails(element.id)).fold(id, id);
       if (response is Cocktail) {
-        final previousLoadings =
-            Map<String, bool?>.from((state as Loaded).loadingInfo);
-        final previousInfos =
-            Map<String, Cocktail>.from((state as Loaded).cocktailsInfo);
         previousLoadings[element.id] = false;
         previousInfos[element.id] = response;
-
-        emit((state as Loaded).copyWith(
-          cocktailsInfo: previousInfos,
-          loadingInfo: previousLoadings,
-        ));
       }
     }
+
+    return prevState.copyWith(
+      cocktailsInfo: previousInfos,
+      loadingInfo: previousLoadings,
+    );
   }
 }

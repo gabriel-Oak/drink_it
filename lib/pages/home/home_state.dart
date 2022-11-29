@@ -13,7 +13,16 @@ class HomeState extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadingList extends HomeState {}
+class LoadingList extends HomeState {
+  final SearchMode searchMode;
+
+  LoadingList({
+    required this.searchMode,
+  });
+
+  @override
+  List<Object?> get props => [searchMode];
+}
 
 class Loaded extends HomeState {
   final List<CocktailItem> list;
@@ -48,9 +57,10 @@ class Loaded extends HomeState {
 
 class ErrorState extends HomeState {
   final String? message;
+  final SearchMode searchMode;
 
-  ErrorState(this.message);
+  ErrorState({required this.searchMode, this.message});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, searchMode];
 }

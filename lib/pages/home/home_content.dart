@@ -1,7 +1,9 @@
 import 'package:drink_it/pages/home/home_bloc.dart';
+import 'package:drink_it/pages/home/home_event.dart';
 import 'package:drink_it/pages/home/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletons/skeletons.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
@@ -9,93 +11,183 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        if (state is! ErrorState && state is! Loaded && state is! LoadingList) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         return Scaffold(
-            // appBar: AppBar(
-            //   title: const Text('Hello Jhon'),
-            // ),
-            body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              color: Colors.blue[500],
-              child: Row(
+          // appBar: AppBar(
+          //   title: const Text('Hello Jhon'),
+          // ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
                 children: [
                   RotatedBox(
                     quarterTurns: 135,
                     child: Container(
                       padding: const EdgeInsets.all(16),
-                      child: const Text('Discovery'),
+                      child: const Text(
+                        'Discovery',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      height: 220,
-                      color: Colors.blue[400],
+                      height: 200,
+                      padding: const EdgeInsets.all(16),
+                      child: const SkeletonAvatar(
+                        style: SkeletonAvatarStyle(
+                          width: double.infinity,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RotatedBox(
-                        quarterTurns: 135,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 24,
-                          ),
-                          child: const Text('Ingredients'),
-                        ),
-                      ),
-                      RotatedBox(
-                        quarterTurns: 135,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 24,
-                          ),
-                          child: const Text('Category'),
-                        ),
-                      ),
-                      RotatedBox(
-                        quarterTurns: 135,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 24,
-                          ),
-                          child: const Text('Alcoholic'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          color: Colors.blue[300],
-                          height: 100,
-                        ),
-                        Expanded(
+                        RotatedBox(
+                          quarterTurns: 135,
                           child: Container(
-                            color: Colors.blue[200],
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (_getMode(state) != SearchMode.ingredients) {
+                                  _searchIngredients(context, 'vodka');
+                                }
+                              },
+                              child: Text(
+                                'Ingredients',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color:
+                                      _getMode(state) == SearchMode.ingredients
+                                          ? Colors.red[400]
+                                          : state is LoadingList
+                                              ? Colors.black12
+                                              : Colors.black87,
+                                ),
+                              ),
+                            ),
                           ),
-                        )
+                        ),
+                        RotatedBox(
+                          quarterTurns: 135,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (_getMode(state) != SearchMode.category) {
+                                  _searchCategory(context, 'cocktail');
+                                }
+                              },
+                              child: Text(
+                                'Category',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color: _getMode(state) == SearchMode.category
+                                      ? Colors.red[400]
+                                      : state is LoadingList
+                                          ? Colors.black12
+                                          : Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        RotatedBox(
+                          quarterTurns: 135,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (_getMode(state) != SearchMode.alcoholic) {
+                                  _searchAlcoholic(context, 'alcoholic');
+                                }
+                              },
+                              child: Text(
+                                'Alcoholic',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color: _getMode(state) == SearchMode.alcoholic
+                                      ? Colors.red[400]
+                                      : state is LoadingList
+                                          ? Colors.black12
+                                          : Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
-        )
-            // bottomNavigationBar: BottomNavigationBar(items: const []),
-            );
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.blue[300],
+                            height: 80,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: state is LoadingList
+                                  ? SkeletonListView()
+                                  : SkeletonListView(),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+          // bottomNavigationBar: BottomNavigationBar(items: const []),
+        );
       });
+
+  _searchIngredients(BuildContext context, String ingredient) {
+    BlocProvider.of<HomeBloc>(context).add(SearchByIngredientEvent(ingredient));
+  }
+
+  _searchCategory(BuildContext context, String category) {
+    BlocProvider.of<HomeBloc>(context).add(SearchByCategoryEvent(category));
+  }
+
+  _searchAlcoholic(BuildContext context, String alcoholic) {
+    BlocProvider.of<HomeBloc>(context).add(SearchByAlcoholicEvent(alcoholic));
+  }
+
+  SearchMode _getMode(HomeState state) {
+    if (state is Loaded) return state.searchMode;
+    if (state is LoadingList) return state.searchMode;
+    if (state is ErrorState) return state.searchMode;
+    return SearchMode.ingredients;
+  }
 }
