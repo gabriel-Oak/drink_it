@@ -38,7 +38,7 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
       }
 
       final response = await client.get(
-        'filter.php',
+        '/filter.php',
         queryParameters: queryParameter,
       );
 
