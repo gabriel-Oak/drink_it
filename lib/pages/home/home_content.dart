@@ -1,5 +1,7 @@
 import 'package:drink_it/pages/home/home_bloc.dart';
 import 'package:drink_it/pages/home/home_event.dart';
+import 'package:drink_it/pages/home/home_list_cocktails.dart';
+import 'package:drink_it/pages/home/home_list_skeleton.dart';
 import 'package:drink_it/pages/home/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +44,11 @@ class HomeContent extends StatelessWidget {
                   Expanded(
                     child: Container(
                       height: 200,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.only(
+                        right: 16,
+                        top: 16,
+                        bottom: 16,
+                      ),
                       child: const SkeletonAvatar(
                         style: SkeletonAvatarStyle(
                           width: double.infinity,
@@ -61,17 +67,17 @@ class HomeContent extends StatelessWidget {
                       children: [
                         RotatedBox(
                           quarterTurns: 135,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 24,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                if (_getMode(state) != SearchMode.ingredients) {
-                                  _searchIngredients(context, 'vodka');
-                                }
-                              },
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_getMode(state) != SearchMode.ingredients) {
+                                _searchIngredients(context, 'vodka');
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 24,
+                              ),
                               child: Text(
                                 'Ingredients',
                                 style: TextStyle(
@@ -80,9 +86,7 @@ class HomeContent extends StatelessWidget {
                                   color:
                                       _getMode(state) == SearchMode.ingredients
                                           ? Colors.red[400]
-                                          : state is LoadingList
-                                              ? Colors.black12
-                                              : Colors.black87,
+                                          : Colors.black87,
                                 ),
                               ),
                             ),
@@ -90,17 +94,17 @@ class HomeContent extends StatelessWidget {
                         ),
                         RotatedBox(
                           quarterTurns: 135,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 24,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                if (_getMode(state) != SearchMode.category) {
-                                  _searchCategory(context, 'cocktail');
-                                }
-                              },
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_getMode(state) != SearchMode.category) {
+                                _searchCategory(context, 'cocktail');
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 24,
+                              ),
                               child: Text(
                                 'Category',
                                 style: TextStyle(
@@ -108,9 +112,7 @@ class HomeContent extends StatelessWidget {
                                   fontSize: 10,
                                   color: _getMode(state) == SearchMode.category
                                       ? Colors.red[400]
-                                      : state is LoadingList
-                                          ? Colors.black12
-                                          : Colors.black87,
+                                      : Colors.black87,
                                 ),
                               ),
                             ),
@@ -118,17 +120,17 @@ class HomeContent extends StatelessWidget {
                         ),
                         RotatedBox(
                           quarterTurns: 135,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 24,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                if (_getMode(state) != SearchMode.alcoholic) {
-                                  _searchAlcoholic(context, 'alcoholic');
-                                }
-                              },
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_getMode(state) != SearchMode.alcoholic) {
+                                _searchAlcoholic(context, 'alcoholic');
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 24,
+                              ),
                               child: Text(
                                 'Alcoholic',
                                 style: TextStyle(
@@ -136,9 +138,7 @@ class HomeContent extends StatelessWidget {
                                   fontSize: 10,
                                   color: _getMode(state) == SearchMode.alcoholic
                                       ? Colors.red[400]
-                                      : state is LoadingList
-                                          ? Colors.black12
-                                          : Colors.black87,
+                                      : Colors.black87,
                                 ),
                               ),
                             ),
@@ -156,8 +156,11 @@ class HomeContent extends StatelessWidget {
                           Expanded(
                             child: Container(
                               child: state is LoadingList
-                                  ? SkeletonListView()
-                                  : SkeletonListView(),
+                                  ? const HomeListSkeleton()
+                                  : HomeListCocktails(
+                                      info: (state as Loaded).cocktailsInfo,
+                                      list: (state).list,
+                                    ),
                             ),
                           )
                         ],

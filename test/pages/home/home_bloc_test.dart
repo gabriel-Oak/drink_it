@@ -64,7 +64,7 @@ void main() {
       build: () => bloc,
       act: (bloc) => bloc.add(SearchByIngredientEvent('vodka')),
       expect: () => [
-        LoadingList(),
+        LoadingList(searchMode: SearchMode.ingredients),
         Loaded(
           list: cocktailsList,
           cocktailsInfo: const {},
@@ -91,7 +91,7 @@ void main() {
       build: () => bloc,
       act: (bloc) => bloc.add(SearchByCategoryEvent('beer')),
       expect: () => [
-        LoadingList(),
+        LoadingList(searchMode: SearchMode.category),
         Loaded(
           list: cocktailsList,
           cocktailsInfo: const {},
@@ -118,7 +118,7 @@ void main() {
       build: () => bloc,
       act: (bloc) => bloc.add(SearchByAlcoholicEvent('alcoholic')),
       expect: () => [
-        LoadingList(),
+        LoadingList(searchMode: SearchMode.alcoholic),
         Loaded(
           list: cocktailsList,
           cocktailsInfo: const {},
