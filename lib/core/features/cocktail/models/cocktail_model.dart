@@ -3,19 +3,20 @@ import 'package:drink_it/core/features/cocktail/models/ingredient_model.dart';
 class Cocktail {
   final String id;
   final String name;
-  final String? video;
   final String thumb;
-  final String? tags;
   final String category;
   final String alcoholic;
   final String glass;
+  final List<Ingredient> ingredients;
+  final String? video;
+  final String? tags;
   final String? instructions;
   final String? instructionsES;
   final String? instructionsDE;
   final String? instructionsFR;
   final String? instructionsIT;
-  final List<Ingredient> ingredients;
   final String? dateModified;
+  final String? iba;
 
   Cocktail({
     required this.id,
@@ -24,6 +25,7 @@ class Cocktail {
     required this.category,
     required this.alcoholic,
     required this.glass,
+    required this.ingredients,
     this.video,
     this.tags,
     this.instructions,
@@ -32,7 +34,7 @@ class Cocktail {
     this.instructionsFR,
     this.instructionsIT,
     this.dateModified,
-    required this.ingredients,
+    this.iba,
   });
 
   static Cocktail fromMap(Map<String, dynamic> map) {
@@ -54,6 +56,7 @@ class Cocktail {
       category: map['strCategory'],
       alcoholic: map['strAlcoholic'],
       glass: map['strGlass'],
+      ingredients: ingredients,
       video: map['strVideo'],
       instructions: map['strInstructions'],
       instructionsES: map['strInstructionsES'],
@@ -61,7 +64,7 @@ class Cocktail {
       instructionsFR: map['strInstructionsFR'],
       instructionsIT: map['strInstructionsIT'],
       dateModified: map['dateModified'],
-      ingredients: ingredients,
+      iba: map['strIBA'],
     );
   }
 
@@ -81,6 +84,7 @@ class Cocktail {
       'strInstructionsFR': instructionsFR,
       'strInstructionsIT': instructionsIT,
       'dateModified': dateModified,
+      'strIBA': iba,
     };
 
     for (var i = 1; i <= 15; i++) {

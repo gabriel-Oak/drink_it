@@ -19,61 +19,69 @@ class HomeListCocktails extends StatelessWidget {
       padding: const EdgeInsets.only(top: 4, right: 16),
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: list.length,
-      itemBuilder: (context, index) => Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        margin: const EdgeInsets.only(bottom: 16),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SkeletonItem(
+      itemBuilder: (context, index) {
+        final cocktail = list[index];
+        final cocktailInfo = info[cocktail.id];
+
+        return Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                SkeletonAvatar(
-                  style: SkeletonAvatarStyle(
-                    width: 80,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
                     height: 80,
-                    borderRadius: BorderRadius.circular(20),
+                    width: 80,
+                    child: Stack(children: [
+                      const SkeletonAvatar(
+                        style: SkeletonAvatarStyle(width: 80, height: 80),
+                      ),
+                      SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Image(
+                          image: NetworkImage(cocktail.thumb),
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
                 const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SkeletonLine(
-                      style: SkeletonLineStyle(
-                        height: 14,
-                        borderRadius: BorderRadius.circular(8),
-                        minLength: MediaQuery.of(context).size.width - 250,
-                        maxLength: MediaQuery.of(context).size.width - 210,
-                        alignment: AlignmentDirectional.topStart,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        cocktail.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    SkeletonLine(
-                      style: SkeletonLineStyle(
-                        height: 12,
-                        borderRadius: BorderRadius.circular(8),
-                        minLength: 90,
-                        maxLength: 140,
-                        alignment: AlignmentDirectional.topStart,
+                      const SizedBox(height: 4),
+                      Text(
+                        cocktailInfo?.ingredients.first.name ?? 'Unknown',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    SkeletonLine(
-                      style: SkeletonLineStyle(
-                        height: 14,
-                        borderRadius: BorderRadius.circular(8),
-                        minLength: MediaQuery.of(context).size.width - 250,
-                        maxLength: MediaQuery.of(context).size.width - 210,
-                        alignment: AlignmentDirectional.topStart,
+                      const SizedBox(height: 4),
+                      Text(
+                        cocktailInfo?.category ?? 'Unknow',
+                        style: const TextStyle(fontSize: 14),
                       ),
-                    ),
-                  ],
-                )
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
