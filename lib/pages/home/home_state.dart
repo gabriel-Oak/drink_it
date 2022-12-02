@@ -15,13 +15,15 @@ class HomeState extends Equatable {
 
 class LoadingList extends HomeState {
   final SearchMode searchMode;
+  final String selectedFilter;
 
   LoadingList({
     required this.searchMode,
+    required this.selectedFilter,
   });
 
   @override
-  List<Object?> get props => [searchMode];
+  List<Object?> get props => [searchMode, selectedFilter];
 }
 
 class Loaded extends HomeState {
@@ -29,11 +31,13 @@ class Loaded extends HomeState {
   final Map<String, Cocktail?> cocktailsInfo;
   final Map<String, bool?> loadingInfo;
   final SearchMode searchMode;
+  final String selectedFilter;
 
   Loaded({
     required this.list,
     required this.cocktailsInfo,
     required this.searchMode,
+    required this.selectedFilter,
     this.loadingInfo = const {},
   });
 
@@ -42,25 +46,31 @@ class Loaded extends HomeState {
     Map<String, Cocktail?>? cocktailsInfo,
     Map<String, bool?>? loadingInfo,
     SearchMode? searchMode,
+    String? selectedFilter,
   }) {
     return Loaded(
-      list: list ?? this.list,
-      cocktailsInfo: cocktailsInfo ?? this.cocktailsInfo,
-      loadingInfo: loadingInfo ?? this.loadingInfo,
-      searchMode: searchMode ?? this.searchMode,
-    );
+        list: list ?? this.list,
+        cocktailsInfo: cocktailsInfo ?? this.cocktailsInfo,
+        loadingInfo: loadingInfo ?? this.loadingInfo,
+        searchMode: searchMode ?? this.searchMode,
+        selectedFilter: selectedFilter ?? this.selectedFilter);
   }
 
   @override
-  List<Object?> get props => [list, cocktailsInfo, loadingInfo];
+  List<Object?> get props => [list, cocktailsInfo, loadingInfo, selectedFilter];
 }
 
 class ErrorState extends HomeState {
   final String? message;
   final SearchMode searchMode;
+  final String selectedFilter;
 
-  ErrorState({required this.searchMode, this.message});
+  ErrorState({
+    required this.searchMode,
+    required this.selectedFilter,
+    this.message,
+  });
 
   @override
-  List<Object?> get props => [message, searchMode];
+  List<Object?> get props => [message, searchMode, selectedFilter];
 }

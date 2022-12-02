@@ -16,7 +16,7 @@ class HomeListCocktails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 4, right: 16),
+      padding: const EdgeInsets.only(top: 4, right: 16, left: 2),
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -24,6 +24,7 @@ class HomeListCocktails extends StatelessWidget {
         final cocktailInfo = info[cocktail.id];
 
         return Card(
+          elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           margin: const EdgeInsets.only(bottom: 16),

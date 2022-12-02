@@ -2,6 +2,7 @@ import 'package:drink_it/pages/home/home_bloc.dart';
 import 'package:drink_it/pages/home/home_event.dart';
 import 'package:drink_it/pages/home/home_list_cocktails.dart';
 import 'package:drink_it/pages/home/home_list_skeleton.dart';
+import 'package:drink_it/pages/home/home_search_bar.dart';
 import 'package:drink_it/pages/home/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +49,7 @@ class HomeContent extends StatelessWidget {
                         right: 16,
                         top: 16,
                         bottom: 16,
+                        left: 2,
                       ),
                       child: const SkeletonAvatar(
                         style: SkeletonAvatarStyle(
@@ -148,10 +150,11 @@ class HomeContent extends StatelessWidget {
                     ),
                     Expanded(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Container(
-                            color: Colors.blue[300],
-                            height: 80,
+                          HomeSearchBar(
+                            searchMode: _getMode(state),
+                            selectedFilter: _getSelectedFilter(state),
                           ),
                           Expanded(
                             child: Container(
@@ -192,5 +195,12 @@ class HomeContent extends StatelessWidget {
     if (state is LoadingList) return state.searchMode;
     if (state is ErrorState) return state.searchMode;
     return SearchMode.ingredients;
+  }
+
+  String? _getSelectedFilter(HomeState state) {
+    if (state is Loaded) return state.selectedFilter;
+    if (state is LoadingList) return state.selectedFilter;
+    if (state is ErrorState) return state.selectedFilter;
+    return null;
   }
 }

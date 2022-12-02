@@ -26,7 +26,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }) : super((HomeState())) {
     on<SearchByIngredientEvent>((event, emit) async {
       if (state is! LoadingList) {
-        emit(LoadingList(searchMode: SearchMode.ingredients));
+        emit(LoadingList(
+          searchMode: SearchMode.ingredients,
+          selectedFilter: event.ingredient,
+        ));
         final response =
             (await searchByIngredient(event.ingredient)).fold(id, id);
         if (response is List<CocktailItem>) {
@@ -34,12 +37,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             list: response,
             cocktailsInfo: const {},
             searchMode: SearchMode.ingredients,
+            selectedFilter: event.ingredient,
           );
           emit(await _getDetails(response, prevState));
         } else {
           emit(ErrorState(
             message: response.toString(),
             searchMode: SearchMode.ingredients,
+            selectedFilter: event.ingredient,
           ));
         }
       }
@@ -47,19 +52,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<SearchByCategoryEvent>((event, emit) async {
       if (state is! LoadingList) {
-        emit(LoadingList(searchMode: SearchMode.category));
+        emit(LoadingList(
+          searchMode: SearchMode.category,
+          selectedFilter: event.category,
+        ));
         final response = (await searchByCategory(event.category)).fold(id, id);
         if (response is List<CocktailItem>) {
           final prevState = Loaded(
             list: response,
             cocktailsInfo: const {},
             searchMode: SearchMode.category,
+            selectedFilter: event.category,
           );
           emit(await _getDetails(response, prevState));
         } else {
           emit(ErrorState(
             message: response.toString(),
             searchMode: SearchMode.category,
+            selectedFilter: event.category,
           ));
         }
       }
@@ -67,7 +77,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<SearchByAlcoholicEvent>((event, emit) async {
       if (state is! LoadingList) {
-        emit(LoadingList(searchMode: SearchMode.alcoholic));
+        emit(LoadingList(
+          searchMode: SearchMode.alcoholic,
+          selectedFilter: event.alcoholic,
+        ));
         final response =
             (await searchByAlcoholic(event.alcoholic)).fold(id, id);
         if (response is List<CocktailItem>) {
@@ -75,11 +88,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             list: response,
             cocktailsInfo: const {},
             searchMode: SearchMode.alcoholic,
+            selectedFilter: event.alcoholic,
           );
           emit(await _getDetails(response, prevState));
         } else {
           emit(ErrorState(
-              message: response.toString(), searchMode: SearchMode.alcoholic));
+            message: response.toString(),
+            searchMode: SearchMode.alcoholic,
+            selectedFilter: event.alcoholic,
+          ));
         }
       }
     });
