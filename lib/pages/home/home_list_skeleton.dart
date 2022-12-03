@@ -7,10 +7,11 @@ class HomeListSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 4, right: 16, left: 2),
+      padding: const EdgeInsets.only(top: 4, right: 16, left: 4),
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: 50,
       itemBuilder: (context, index) => Card(
+        elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         margin: const EdgeInsets.only(bottom: 16),
         child: Padding(

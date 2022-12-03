@@ -21,9 +21,14 @@ class HomeContent extends StatelessWidget {
         }
 
         return Scaffold(
-          // appBar: AppBar(
-          //   title: const Text('Hello Jhon'),
-          // ),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            title: const Text(
+              'Hello Jhon',
+              style: TextStyle(color: Colors.black54),
+            ),
+          ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -37,7 +42,7 @@ class HomeContent extends StatelessWidget {
                         'Discovery',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -59,6 +64,10 @@ class HomeContent extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              HomeSearchBar(
+                searchMode: _getMode(state),
+                selectedFilter: _getSelectedFilter(state),
               ),
               Expanded(
                 child: Row(
@@ -84,7 +93,7 @@ class HomeContent extends StatelessWidget {
                                 'Ingredients',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color:
                                       _getMode(state) == SearchMode.ingredients
                                           ? Colors.red[400]
@@ -111,7 +120,7 @@ class HomeContent extends StatelessWidget {
                                 'Category',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: _getMode(state) == SearchMode.category
                                       ? Colors.red[400]
                                       : Colors.black87,
@@ -137,7 +146,7 @@ class HomeContent extends StatelessWidget {
                                 'Alcoholic',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   color: _getMode(state) == SearchMode.alcoholic
                                       ? Colors.red[400]
                                       : Colors.black87,
@@ -149,24 +158,13 @@ class HomeContent extends StatelessWidget {
                       ],
                     ),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          HomeSearchBar(
-                            searchMode: _getMode(state),
-                            selectedFilter: _getSelectedFilter(state),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: state is LoadingList
-                                  ? const HomeListSkeleton()
-                                  : HomeListCocktails(
-                                      info: (state as Loaded).cocktailsInfo,
-                                      list: (state).list,
-                                    ),
-                            ),
-                          )
-                        ],
+                      child: Container(
+                        child: state is LoadingList
+                            ? const HomeListSkeleton()
+                            : HomeListCocktails(
+                                info: (state as Loaded).cocktailsInfo,
+                                list: (state).list,
+                              ),
                       ),
                     )
                   ],

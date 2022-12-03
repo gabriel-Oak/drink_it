@@ -16,7 +16,7 @@ class HomeListCocktails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 4, right: 16, left: 2),
+      padding: const EdgeInsets.only(top: 4, right: 16, left: 4),
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: list.length,
       itemBuilder: (context, index) {
@@ -45,7 +45,7 @@ class HomeListCocktails extends StatelessWidget {
                         height: 80,
                         width: 80,
                         child: Image(
-                          image: NetworkImage(cocktail.thumb),
+                          image: NetworkImage('${cocktail.thumb}/preview'),
                         ),
                       ),
                     ]),
@@ -60,17 +60,17 @@ class HomeListCocktails extends StatelessWidget {
                         cocktail.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         cocktailInfo?.ingredients.first.name ?? 'Unknown',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 14),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         cocktailInfo?.category ?? 'Unknow',
                         style: const TextStyle(fontSize: 14),
