@@ -70,13 +70,14 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
         where: 'idDrink = ?',
         whereArgs: [id],
       );
-      if (result.isEmpty) throw DatasourceError();
+      if (result.isEmpty) {
+        throw DatasourceError(message: 'Cocktail not in the database!');
+      }
       return Cocktail.fromMap(result.first);
     } catch (e) {
       throw DatasourceError(
           metadata: e.toString(),
-          message:
-              'Sorry, something went wrong saving the cocktail locally :/');
+          message: 'Sorry, something went wrong search the cocktail :/');
     }
   }
 

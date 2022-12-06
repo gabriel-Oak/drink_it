@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:drink_it/core/db/db.dart';
-import 'package:drink_it/core/db/scripts/cocktails_table.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
@@ -30,13 +29,9 @@ void main() {
 
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
-      'cocktails',
-      columns: [
-        'idDrink',
-        'strDrink',
-        'strDrinkThumb',
-      ],
-      where: 'WHERE LOWER(strIngredient1) LIKE LOWER(\'%vodka%\')',
+      any,
+      columns: anyNamed('columns'),
+      where: anyNamed('where'),
     )).thenAnswer((_) async => mock);
 
     final results = await datasource.getCocktails(ingredient: 'vodka');
@@ -51,13 +46,9 @@ void main() {
 
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
-      'cocktails',
-      columns: [
-        'idDrink',
-        'strDrink',
-        'strDrinkThumb',
-      ],
-      where: 'WHERE LOWER(strCategory) = LOWER(beer)',
+      any,
+      columns: anyNamed('columns'),
+      where: anyNamed('where'),
     )).thenAnswer((_) async => mock);
 
     final results = await datasource.getCocktails(category: 'beer');
@@ -73,13 +64,9 @@ void main() {
 
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
-      'cocktails',
-      columns: [
-        'idDrink',
-        'strDrink',
-        'strDrinkThumb',
-      ],
-      where: 'WHERE LOWER(strAlcoholic) = LOWER(alcoholic)',
+      any,
+      columns: anyNamed('columns'),
+      where: anyNamed('where'),
     )).thenAnswer((_) async => mock);
 
     final results = await datasource.getCocktails(alcoholic: 'alcoholic');
@@ -101,10 +88,10 @@ void main() {
 
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
-      'cocktails',
-      columns: cocktailsColumns,
-      where: 'WHERE idDrink = ?',
-      whereArgs: ['11118'],
+      any,
+      columns: anyNamed('columns'),
+      where: anyNamed('where'),
+      whereArgs: anyNamed('whereArgs'),
     )).thenAnswer((_) async => mock);
 
     final results = await datasource.getDetails('11118');
@@ -115,10 +102,10 @@ void main() {
     final List<Map<String, Object?>> mock = [];
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
-      'cocktails',
-      columns: cocktailsColumns,
-      where: 'WHERE idDrink = ?',
-      whereArgs: ['11118'],
+      any,
+      columns: anyNamed('columns'),
+      where: anyNamed('where'),
+      whereArgs: anyNamed('whereArgs'),
     )).thenAnswer((_) async => mock);
 
     final results = datasource.getDetails('11118');
@@ -130,9 +117,9 @@ void main() {
         (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
     when(db.get()).thenAnswer((_) async => database);
     when(database.insert(
-      'cocktail',
-      cocktail.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      any,
+      any,
+      conflictAlgorithm: anyNamed('conflictAlgorithm'),
     )).thenAnswer((_) async => 1);
 
     final result = await datasource.save(cocktail);
@@ -144,9 +131,9 @@ void main() {
         (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
     when(db.get()).thenAnswer((_) async => database);
     when(database.insert(
-      'cocktail',
-      cocktail.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      any,
+      any,
+      conflictAlgorithm: anyNamed('conflictAlgorithm'),
     )).thenThrow((_) async => Exception());
 
     final result = datasource.save(cocktail);

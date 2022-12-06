@@ -20,7 +20,7 @@ void main() {
 
   test('Should get cocktails by vodka and return List<CokctailItemModel>',
       () async {
-    when(client.get('filter.php', queryParameters: {'i': 'vodka'})).thenAnswer(
+    when(client.get('/filter.php', queryParameters: {'i': 'vodka'})).thenAnswer(
       (_) async => Response(
         data: jsonDecode(cocktailsListMock),
         statusCode: 200,
@@ -35,7 +35,7 @@ void main() {
 
   test('Should get cocktails by alcoholic and return List<CokctailItemModel>',
       () async {
-    when(client.get('filter.php', queryParameters: {'a': 'alcoholic'}))
+    when(client.get('/filter.php', queryParameters: {'a': 'alcoholic'}))
         .thenAnswer(
       (_) async => Response(
         data: jsonDecode(cocktailsListMock),
@@ -51,7 +51,7 @@ void main() {
 
   test('Should get cocktails by beer and return List<CokctailItemModel>',
       () async {
-    when(client.get('filter.php', queryParameters: {'c': 'beer'})).thenAnswer(
+    when(client.get('/filter.php', queryParameters: {'c': 'beer'})).thenAnswer(
       (_) async => Response(
         data: jsonDecode(cocktailsListMock),
         statusCode: 200,
@@ -65,7 +65,7 @@ void main() {
   });
 
   test('Should deal with http error', () async {
-    when(client.get('filter.php', queryParameters: {'i': 'vodka'})).thenAnswer(
+    when(client.get('/filter.php', queryParameters: {'i': 'vodka'})).thenAnswer(
       (_) async => Response(
         data: {},
         statusCode: 400,
@@ -83,7 +83,7 @@ void main() {
   });
 
   test('Should return a cocktail', () async {
-    when(client.get('lookup.php', queryParameters: {'i': '11007'})).thenAnswer(
+    when(client.get('/lookup.php', queryParameters: {'i': '11007'})).thenAnswer(
       (_) async => Response(
         data: jsonDecode(cocktailsSearchMock),
         statusCode: 200,
@@ -96,7 +96,7 @@ void main() {
   });
 
   test('Should deal with cocktail search error', () async {
-    when(client.get('lookup.php', queryParameters: {'i': '11007'})).thenAnswer(
+    when(client.get('/lookup.php', queryParameters: {'i': '11007'})).thenAnswer(
       (_) async => Response(
         data: {},
         statusCode: 400,

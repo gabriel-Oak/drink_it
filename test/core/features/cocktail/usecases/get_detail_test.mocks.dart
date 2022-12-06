@@ -49,6 +49,20 @@ class MockCocktailExternalDatasource extends _i1.Mock
   }
 
   @override
+  _i4.Future<_i2.Cocktail> lookupRandom() => (super.noSuchMethod(
+        Invocation.method(
+          #lookupRandom,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Cocktail>.value(_FakeCocktail_0(
+          this,
+          Invocation.method(
+            #lookupRandom,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cocktail>);
+  @override
   _i4.Future<_i2.Cocktail> getDetails(String? id) => (super.noSuchMethod(
         Invocation.method(
           #getDetails,
@@ -174,11 +188,6 @@ class MockCocktail extends _i1.Mock implements _i2.Cocktail {
         returnValue: '',
       ) as String);
   @override
-  String get tags => (super.noSuchMethod(
-        Invocation.getter(#tags),
-        returnValue: '',
-      ) as String);
-  @override
   String get category => (super.noSuchMethod(
         Invocation.getter(#category),
         returnValue: '',
@@ -198,11 +207,6 @@ class MockCocktail extends _i1.Mock implements _i2.Cocktail {
         Invocation.getter(#ingredients),
         returnValue: <_i8.Ingredient>[],
       ) as List<_i8.Ingredient>);
-  @override
-  String get dateModified => (super.noSuchMethod(
-        Invocation.getter(#dateModified),
-        returnValue: '',
-      ) as String);
   @override
   Map<String, dynamic> toMap() => (super.noSuchMethod(
         Invocation.method(

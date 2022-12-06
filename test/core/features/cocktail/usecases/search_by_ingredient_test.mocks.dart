@@ -99,6 +99,20 @@ class MockCocktailExternalDatasource extends _i1.Mock
   }
 
   @override
+  _i4.Future<_i2.Cocktail> lookupRandom() => (super.noSuchMethod(
+        Invocation.method(
+          #lookupRandom,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Cocktail>.value(_FakeCocktail_0(
+          this,
+          Invocation.method(
+            #lookupRandom,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cocktail>);
+  @override
   _i4.Future<_i2.Cocktail> getDetails(String? id) => (super.noSuchMethod(
         Invocation.method(
           #getDetails,

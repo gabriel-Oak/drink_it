@@ -68,18 +68,6 @@ void main() {
             searchMode: SearchMode.ingredients, selectedFilter: 'vodka'),
         Loaded(
             list: cocktailsList,
-            cocktailsInfo: const {},
-            loadingInfo: const {},
-            searchMode: SearchMode.ingredients,
-            selectedFilter: 'vodka'),
-        Loaded(
-            list: cocktailsList,
-            cocktailsInfo: const {},
-            loadingInfo: const {'11007': true},
-            searchMode: SearchMode.ingredients,
-            selectedFilter: 'vodka'),
-        Loaded(
-            list: cocktailsList,
             cocktailsInfo: {'11007': cocktailInfo},
             loadingInfo: const {'11007': false},
             searchMode: SearchMode.ingredients,
@@ -93,20 +81,6 @@ void main() {
       act: (bloc) => bloc.add(SearchByCategoryEvent('beer')),
       expect: () => [
         LoadingList(
-          searchMode: SearchMode.category,
-          selectedFilter: 'beer',
-        ),
-        Loaded(
-          list: cocktailsList,
-          cocktailsInfo: const {},
-          loadingInfo: const {},
-          searchMode: SearchMode.category,
-          selectedFilter: 'beer',
-        ),
-        Loaded(
-          list: cocktailsList,
-          cocktailsInfo: const {},
-          loadingInfo: const {'11007': true},
           searchMode: SearchMode.category,
           selectedFilter: 'beer',
         ),
@@ -126,20 +100,6 @@ void main() {
       act: (bloc) => bloc.add(SearchByAlcoholicEvent('alcoholic')),
       expect: () => [
         LoadingList(
-          searchMode: SearchMode.alcoholic,
-          selectedFilter: 'alcoholic',
-        ),
-        Loaded(
-          list: cocktailsList,
-          cocktailsInfo: const {},
-          loadingInfo: const {},
-          searchMode: SearchMode.alcoholic,
-          selectedFilter: 'alcoholic',
-        ),
-        Loaded(
-          list: cocktailsList,
-          cocktailsInfo: const {},
-          loadingInfo: const {'11007': true},
           searchMode: SearchMode.alcoholic,
           selectedFilter: 'alcoholic',
         ),

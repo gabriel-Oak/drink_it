@@ -4,6 +4,7 @@ import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 
 abstract class CocktailExternalDatasource {
+  Future<Cocktail> lookupRandom();
   Future<Cocktail> getDetails(String id);
   Future<List<CocktailItem>> getCocktails({
     String? ingredient,
@@ -85,5 +86,11 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
         message: 'Oops could\'t find your cocktail :(',
       );
     }
+  }
+
+  @override
+  Future<Cocktail> lookupRandom() {
+    // TODO: implement lookupRandom
+    throw UnimplementedError();
   }
 }
