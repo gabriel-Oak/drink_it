@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
+import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_alcoholic.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dart';
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
@@ -23,6 +24,7 @@ import 'home_bloc_test.mocks.dart';
   SearchByAlcoholic,
   SearchByCategory,
   GetDetails,
+  LookupRandom,
 ])
 void main() {
   final cocktailMap = (jsonDecode(cocktailsSearchMock)['drinks'] as List).first;
@@ -33,25 +35,27 @@ void main() {
   final searchByAlcoholic = MockSearchByAlcoholic();
   final searchByCategory = MockSearchByCategory();
   final getDetails = MockGetDetails();
+  final lookupRandom = MockLookupRandom();
 
   group('CounterBloc', () {
     late HomeBloc bloc;
 
     setUp(() {
-      when(searchByIngredients.call('vodka'))
+      when(searchByIngredients('vodka'))
           .thenAnswer((_) async => Right(cocktailsList));
-      when(searchByCategory.call('beer'))
+      when(searchByCategory('beer'))
           .thenAnswer((_) async => Right(cocktailsList));
-      when(searchByAlcoholic.call('alcoholic'))
+      when(searchByAlcoholic('alcoholic'))
           .thenAnswer((_) async => Right(cocktailsList));
-      when(getDetails.call('11007'))
-          .thenAnswer((_) async => Right(cocktailInfo));
+      when(getDetails('11007')).thenAnswer((_) async => Right(cocktailInfo));
+      when(lookupRandom()).thenAnswer((_) async => Right(cocktailInfo));
 
       bloc = HomeBloc(
         getDetails: getDetails,
         searchByAlcoholic: searchByAlcoholic,
         searchByCategory: searchByCategory,
         searchByIngredient: searchByIngredients,
+        lookupRandom: lookupRandom,
       );
     });
 
@@ -65,13 +69,17 @@ void main() {
       act: (bloc) => bloc.add(SearchByIngredientEvent('vodka')),
       expect: () => [
         LoadingList(
-            searchMode: SearchMode.ingredients, selectedFilter: 'vodka'),
+          searchMode: SearchMode.ingredients,
+          selectedFilter: 'vodka',
+        ),
         Loaded(
-            list: cocktailsList,
-            cocktailsInfo: {'11007': cocktailInfo},
-            loadingInfo: const {'11007': false},
-            searchMode: SearchMode.ingredients,
-            selectedFilter: 'vodka'),
+          list: cocktailsList,
+          cocktailsInfo: {'11007': cocktailInfo},
+          loadingInfo: const {'11007': false},
+          searchMode: SearchMode.ingredients,
+          selectedFilter: 'vodka',
+          randomLookup: cocktailInfo,
+        ),
       ],
     );
 
@@ -90,6 +98,7 @@ void main() {
           loadingInfo: const {'11007': false},
           searchMode: SearchMode.category,
           selectedFilter: 'beer',
+          randomLookup: cocktailInfo,
         ),
       ],
     );
@@ -109,6 +118,7 @@ void main() {
           loadingInfo: const {'11007': false},
           searchMode: SearchMode.alcoholic,
           selectedFilter: 'alcoholic',
+          randomLookup: cocktailInfo,
         ),
       ],
     );

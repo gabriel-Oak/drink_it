@@ -187,11 +187,6 @@ class MockCocktail extends _i1.Mock implements _i2.Cocktail {
         returnValue: '',
       ) as String);
   @override
-  String get category => (super.noSuchMethod(
-        Invocation.getter(#category),
-        returnValue: '',
-      ) as String);
-  @override
   String get alcoholic => (super.noSuchMethod(
         Invocation.getter(#alcoholic),
         returnValue: '',

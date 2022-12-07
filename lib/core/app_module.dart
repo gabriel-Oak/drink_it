@@ -2,6 +2,7 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
+import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_alcoholic.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dart';
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
@@ -41,6 +42,10 @@ class AppModule extends Module {
               localDatasource: i(),
               network: i(),
             )),
+        Bind(
+          (i) => LookupRandomImpl(
+              externalDatasource: i(), localDatasource: i(), network: i()),
+        ),
 
         // HomePage
         Bind((i) => HomeBloc(
@@ -48,6 +53,7 @@ class AppModule extends Module {
               searchByAlcoholic: i(),
               searchByCategory: i(),
               searchByIngredient: i(),
+              lookupRandom: i(),
             ))
       ];
 }

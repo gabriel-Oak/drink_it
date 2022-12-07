@@ -2,11 +2,11 @@ import 'package:drink_it/pages/home/home_bloc.dart';
 import 'package:drink_it/pages/home/home_event.dart';
 import 'package:drink_it/pages/home/home_list_cocktails.dart';
 import 'package:drink_it/pages/home/home_list_skeleton.dart';
+import 'package:drink_it/pages/home/home_random.dart';
 import 'package:drink_it/pages/home/home_search_bar.dart';
 import 'package:drink_it/pages/home/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletons/skeletons.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});
@@ -14,6 +14,12 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        if ((state is Loaded || state is ErrorState) &&
+            (state as dynamic).message != null) {
+          final snackBar = SnackBar(content: Text((state as dynamic).message));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+
         if (state is! ErrorState && state is! Loaded && state is! LoadingList) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -49,6 +55,9 @@ class HomeContent extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
                       height: 200,
                       padding: const EdgeInsets.only(
                         right: 16,
@@ -56,10 +65,9 @@ class HomeContent extends StatelessWidget {
                         bottom: 16,
                         left: 2,
                       ),
-                      child: const SkeletonAvatar(
-                        style: SkeletonAvatarStyle(
-                          width: double.infinity,
-                        ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: const HomeRandom(),
                       ),
                     ),
                   ),
@@ -161,10 +169,13 @@ class HomeContent extends StatelessWidget {
                       child: Container(
                         child: state is LoadingList
                             ? const HomeListSkeleton()
-                            : HomeListCocktails(
-                                info: (state as Loaded).cocktailsInfo,
-                                list: (state).list,
-                              ),
+                            : state is Loaded
+                                ? HomeListCocktails(
+                                    info: (state).cocktailsInfo,
+                                    list: (state).list,
+                                  )
+                                : Center(
+                                    child: Text((state as ErrorState).message)),
                       ),
                     )
                   ],

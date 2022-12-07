@@ -32,13 +32,17 @@ class Loaded extends HomeState {
   final Map<String, bool?> loadingInfo;
   final SearchMode searchMode;
   final String selectedFilter;
+  final Cocktail? randomLookup;
+  final String? message;
 
   Loaded({
     required this.list,
     required this.cocktailsInfo,
     required this.searchMode,
     required this.selectedFilter,
+    this.randomLookup,
     this.loadingInfo = const {},
+    this.message,
   });
 
   Loaded copyWith({
@@ -47,30 +51,44 @@ class Loaded extends HomeState {
     Map<String, bool?>? loadingInfo,
     SearchMode? searchMode,
     String? selectedFilter,
-  }) {
-    return Loaded(
+    Cocktail? randomLookup,
+    String? message,
+  }) =>
+      Loaded(
         list: list ?? this.list,
         cocktailsInfo: cocktailsInfo ?? this.cocktailsInfo,
         loadingInfo: loadingInfo ?? this.loadingInfo,
         searchMode: searchMode ?? this.searchMode,
-        selectedFilter: selectedFilter ?? this.selectedFilter);
-  }
+        selectedFilter: selectedFilter ?? this.selectedFilter,
+        randomLookup: randomLookup ?? this.randomLookup,
+        message: message ?? this.message,
+      );
 
   @override
-  List<Object?> get props => [list, cocktailsInfo, loadingInfo, selectedFilter];
+  List<Object?> get props => [
+        list,
+        cocktailsInfo,
+        loadingInfo,
+        selectedFilter,
+        randomLookup,
+        message,
+      ];
 }
 
 class ErrorState extends HomeState {
-  final String? message;
+  final String message;
   final SearchMode searchMode;
   final String selectedFilter;
+  final Cocktail? randomLookup;
 
   ErrorState({
     required this.searchMode,
     required this.selectedFilter,
-    this.message,
+    required this.message,
+    this.randomLookup,
   });
 
   @override
-  List<Object?> get props => [message, searchMode, selectedFilter];
+  List<Object?> get props =>
+      [message, searchMode, selectedFilter, randomLookup];
 }

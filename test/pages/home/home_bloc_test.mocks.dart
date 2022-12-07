@@ -13,6 +13,8 @@ import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart'
     as _i10;
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart'
     as _i9;
+import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart'
+    as _i11;
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_alcoholic.dart'
     as _i7;
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dart'
@@ -156,6 +158,33 @@ class MockGetDetails extends _i1.Mock implements _i9.GetDetails {
           Invocation.method(
             #call,
             [cocktailId],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.FailureGetCocktails, _i10.Cocktail>>);
+}
+
+/// A class which mocks [LookupRandom].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLookupRandom extends _i1.Mock implements _i11.LookupRandom {
+  MockLookupRandom() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Either<_i5.FailureGetCocktails, _i10.Cocktail>> call() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #call,
+          [],
+        ),
+        returnValue: _i4.Future<
+                _i2.Either<_i5.FailureGetCocktails, _i10.Cocktail>>.value(
+            _FakeEither_0<_i5.FailureGetCocktails, _i10.Cocktail>(
+          this,
+          Invocation.method(
+            #call,
+            [],
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.FailureGetCocktails, _i10.Cocktail>>);
