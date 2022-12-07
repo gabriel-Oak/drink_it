@@ -4,10 +4,10 @@ class Cocktail {
   final String id;
   final String name;
   final String thumb;
-  final String category;
   final String alcoholic;
   final String glass;
   final List<Ingredient> ingredients;
+  final String? category;
   final String? video;
   final String? tags;
   final String? instructions;
@@ -22,10 +22,10 @@ class Cocktail {
     required this.id,
     required this.name,
     required this.thumb,
-    required this.category,
     required this.alcoholic,
     required this.glass,
     required this.ingredients,
+    this.category,
     this.video,
     this.tags,
     this.instructions,

@@ -6,6 +6,7 @@ import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class CocktailLocalDatasource {
+  Future<Cocktail> lookupRandom();
   Future<Cocktail> getDetails(String id);
   Future<int> save(Cocktail cocktail);
   Future<List<CocktailItem>> getCocktails({
@@ -63,7 +64,6 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
   Future<Cocktail> getDetails(String id) async {
     try {
       final database = await db.get();
-
       final result = await database.query(
         'cocktails',
         columns: cocktailsColumns,
@@ -97,6 +97,32 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
       throw DatasourceError(
         metadata: e.toString(),
         message: 'Sorry, it wasn\'t possible to find your cocktail :/',
+      );
+    }
+  }
+
+  @override
+  Future<Cocktail> lookupRandom() async {
+    try {
+      final database = await db.get();
+      final List result = await database.query(
+        'cocktails',
+        columns: cocktailsColumns,
+        orderBy: 'RANDOM()',
+        limit: 1,
+      );
+      if (result.isEmpty) {
+        throw DatasourceError(
+            message: 'Looks like you dont have any cocktails saved');
+      }
+
+      return Cocktail.fromMap(result.first);
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(
+        message: 'Error looking for a random cocktail',
+        metadata: e.toString(),
       );
     }
   }

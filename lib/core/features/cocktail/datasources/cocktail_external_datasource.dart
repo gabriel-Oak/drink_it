@@ -45,8 +45,9 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
 
       if (response.statusCode != 200) {
         throw DatasourceError(
-            metadata: response.data.toString(),
-            message: 'Oh my, we have an error contacting TheCocktailDB');
+          metadata: response.data.toString(),
+          message: 'Oh my, we have an error contacting TheCocktailDB',
+        );
       }
 
       final list = (response.data['drinks'] as List)
@@ -73,8 +74,9 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
 
       if (response.statusCode != 200) {
         throw DatasourceError(
-            metadata: response.data.toString(),
-            message: 'Oh my, we have an error searching in TheCocktailDB');
+          metadata: response.data.toString(),
+          message: 'Oh my, we have an error searching in TheCocktailDB',
+        );
       }
 
       return Cocktail.fromMap((response.data['drinks'] as List).first);
@@ -89,8 +91,22 @@ class CocktailExternallDatasourceImpl extends CocktailExternalDatasource {
   }
 
   @override
-  Future<Cocktail> lookupRandom() {
-    // TODO: implement lookupRandom
-    throw UnimplementedError();
+  Future<Cocktail> lookupRandom() async {
+    try {
+      final response = await client.get('/random.php');
+      if (response.statusCode != 200) {
+        throw DatasourceError(
+          metadata: response.data.toString(),
+          message: 'Oh my, we have an error searching in TheCocktailDB',
+        );
+      }
+
+      return Cocktail.fromMap((response.data['drinks'] as List).first);
+    } catch (e) {
+      throw DatasourceError(
+        metadata: e.toString(),
+        message: 'Oops could\'t find a random cocktail :(',
+      );
+    }
   }
 }

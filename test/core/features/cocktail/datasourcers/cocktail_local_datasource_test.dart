@@ -20,13 +20,14 @@ void main() {
   final db = MockDb();
   final database = MockDatabase();
   final datasource = CocktailLocalDatasourceImpl(db: db);
+  final cocktail = Cocktail.fromMap(
+      (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
+  final FutureOr<List<Map<String, Object?>>> mock =
+      Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
+    return e as Map<String, Object?>;
+  }).toList());
 
   test('Should get List<CokctailItemModel> from database by vodka', () async {
-    final FutureOr<List<Map<String, Object?>>> mock =
-        Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
-      return e as Map<String, Object?>;
-    }).toList());
-
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
       any,
@@ -39,11 +40,6 @@ void main() {
   });
 
   test('Should get List<CokctailItemModel> from database by beer', () async {
-    final FutureOr<List<Map<String, Object?>>> mock =
-        Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
-      return e as Map<String, Object?>;
-    }).toList());
-
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
       any,
@@ -57,11 +53,6 @@ void main() {
 
   test('Should get List<CokctailItemModel> from database by alcoholic',
       () async {
-    final FutureOr<List<Map<String, Object?>>> mock =
-        Future.value((jsonDecode(cocktailsListMock)['drinks'] as List).map((e) {
-      return e as Map<String, Object?>;
-    }).toList());
-
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
       any,
@@ -99,22 +90,19 @@ void main() {
   });
 
   test('Should not return a cocktail', () async {
-    final List<Map<String, Object?>> mock = [];
     when(db.get()).thenAnswer((_) async => database);
     when(database.query(
       any,
       columns: anyNamed('columns'),
       where: anyNamed('where'),
       whereArgs: anyNamed('whereArgs'),
-    )).thenAnswer((_) async => mock);
+    )).thenAnswer((_) async => []);
 
     final results = datasource.getDetails('11118');
     expect(results, throwsA(isA<DatasourceError>()));
   });
 
   test('Should save a cocktail in database', () async {
-    final cocktail = Cocktail.fromMap(
-        (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
     when(db.get()).thenAnswer((_) async => database);
     when(database.insert(
       any,
@@ -127,8 +115,6 @@ void main() {
   });
 
   test('Should deal with error saving a cocktail in database', () async {
-    final cocktail = Cocktail.fromMap(
-        (jsonDecode(cocktailsSearchMock)['drinks'] as List).first);
     when(db.get()).thenAnswer((_) async => database);
     when(database.insert(
       any,
@@ -138,5 +124,49 @@ void main() {
 
     final result = datasource.save(cocktail);
     expect(result, throwsA(isA<DatasourceError>()));
+  });
+
+  test('Should return a random cocktail', () async {
+    final FutureOr<List<Map<String, Object?>>> mock =
+        (jsonDecode(cocktailsSearchMock)['drinks'] as List).map((e) {
+      return e as Map<String, Object?>;
+    }).toList();
+
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.query(
+      any,
+      columns: anyNamed('columns'),
+      limit: anyNamed('limit'),
+      orderBy: anyNamed('orderBy'),
+    )).thenAnswer((_) async => mock);
+
+    final results = await datasource.lookupRandom();
+    expect(results, isA<Cocktail>());
+  });
+
+  test('Should return error instead a random cocktail', () async {
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.query(
+      any,
+      columns: anyNamed('columns'),
+      limit: anyNamed('limit'),
+      orderBy: anyNamed('orderBy'),
+    )).thenAnswer((_) async => []);
+
+    final results = datasource.lookupRandom();
+    expect(results, throwsA(isA<DatasourceError>()));
+  });
+
+  test('Should deal with errors looking for random cocktail', () async {
+    when(db.get()).thenAnswer((_) async => database);
+    when(database.query(
+      any,
+      columns: anyNamed('columns'),
+      limit: anyNamed('limit'),
+      orderBy: anyNamed('orderBy'),
+    )).thenThrow(Exception());
+
+    final results = datasource.lookupRandom();
+    expect(results, throwsA(isA<DatasourceError>()));
   });
 }

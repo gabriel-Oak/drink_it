@@ -3,6 +3,7 @@ import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/utils/network_info.dart';
 
 abstract class LookupRandom {
   Future<Either<FailureGetCocktails, Cocktail>> call();
@@ -11,19 +12,24 @@ abstract class LookupRandom {
 class LookupRandomImpl extends LookupRandom {
   final CocktailExternalDatasource externalDatasource;
   final CocktailLocalDatasource localDatasource;
+  final NetworkInfo network;
 
   LookupRandomImpl({
     required this.externalDatasource,
     required this.localDatasource,
+    required this.network,
   });
 
   @override
   Future<Either<FailureGetCocktails, Cocktail>> call() async {
     try {
-      final cocktail = await externalDatasource.lookupRandom();
+      final isConnectec = await network.isConnected;
+      final cocktail = isConnectec
+          ? await externalDatasource.lookupRandom()
+          : await localDatasource.lookupRandom();
 
       try {
-        localDatasource.save(cocktail);
+        if (isConnectec) localDatasource.save(cocktail);
       } catch (e) {
         print(e.toString());
       }

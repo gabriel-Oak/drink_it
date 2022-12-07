@@ -107,4 +107,29 @@ void main() {
     final results = datasource.getDetails('11007');
     expect(results, throwsA(isA<DatasourceError>()));
   });
+
+  test('Should get a random cocktail', () async {
+    when(client.get('/random.php'))
+        .thenAnswer((realInvocation) async => Response(
+              data: jsonDecode(cocktailsSearchMock),
+              statusCode: 200,
+              requestOptions: RequestOptions(path: ''),
+            ));
+
+    final results = await datasource.lookupRandom();
+    expect(results, isA<Cocktail>());
+  });
+
+  test('Should deal with random search errors', () async {
+    when(client.get('/random.php')).thenAnswer(
+      (_) async => Response(
+        data: {},
+        statusCode: 400,
+        requestOptions: RequestOptions(path: ''),
+      ),
+    );
+
+    final results = datasource.lookupRandom();
+    expect(results, throwsA(isA<DatasourceError>()));
+  });
 }
