@@ -8,7 +8,7 @@ import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dar
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
 import 'package:drink_it/core/utils/cocktail_client.dart';
 import 'package:drink_it/core/utils/network_info.dart';
-import 'package:drink_it/pages/home/home_bloc.dart';
+import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {

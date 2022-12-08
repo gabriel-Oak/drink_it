@@ -1,6 +1,6 @@
-import 'package:drink_it/pages/home/home_bloc.dart';
+import 'package:drink_it/pages/home/bloc/home_bloc.dart';
+import 'package:drink_it/pages/home/bloc/home_event.dart';
 import 'package:drink_it/pages/home/home_content.dart';
-import 'package:drink_it/pages/home/home_event.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';

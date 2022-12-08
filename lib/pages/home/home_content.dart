@@ -1,10 +1,12 @@
-import 'package:drink_it/pages/home/home_bloc.dart';
-import 'package:drink_it/pages/home/home_event.dart';
-import 'package:drink_it/pages/home/home_list_cocktails.dart';
-import 'package:drink_it/pages/home/home_list_skeleton.dart';
-import 'package:drink_it/pages/home/home_random.dart';
-import 'package:drink_it/pages/home/home_search_bar.dart';
-import 'package:drink_it/pages/home/home_state.dart';
+import 'package:drink_it/core/widgets/build_appbar.dart';
+import 'package:drink_it/core/widgets/nav_bar.dart';
+import 'package:drink_it/pages/home/bloc/home_bloc.dart';
+import 'package:drink_it/pages/home/bloc/home_event.dart';
+import 'package:drink_it/pages/home/bloc/home_state.dart';
+import 'package:drink_it/pages/home/widgets/home_random.dart';
+import 'package:drink_it/pages/home/widgets/home_list_cocktails.dart';
+import 'package:drink_it/pages/home/widgets/home_list_skeleton.dart';
+import 'package:drink_it/pages/home/widgets/home_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,14 +29,7 @@ class HomeContent extends StatelessWidget {
         }
 
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            title: const Text(
-              'Hello Jhon',
-              style: TextStyle(color: Colors.black54),
-            ),
-          ),
+          appBar: buildAppBar(context),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -49,6 +44,7 @@ class HomeContent extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
+                          color: Colors.black54,
                         ),
                       ),
                     ),
@@ -105,7 +101,7 @@ class HomeContent extends StatelessWidget {
                                   color:
                                       _getMode(state) == SearchMode.ingredients
                                           ? Colors.red[400]
-                                          : Colors.black87,
+                                          : Colors.black54,
                                 ),
                               ),
                             ),
@@ -131,7 +127,7 @@ class HomeContent extends StatelessWidget {
                                   fontSize: 12,
                                   color: _getMode(state) == SearchMode.category
                                       ? Colors.red[400]
-                                      : Colors.black87,
+                                      : Colors.black54,
                                 ),
                               ),
                             ),
@@ -157,7 +153,7 @@ class HomeContent extends StatelessWidget {
                                   fontSize: 12,
                                   color: _getMode(state) == SearchMode.alcoholic
                                       ? Colors.red[400]
-                                      : Colors.black87,
+                                      : Colors.black54,
                                 ),
                               ),
                             ),
@@ -175,7 +171,8 @@ class HomeContent extends StatelessWidget {
                                     list: (state).list,
                                   )
                                 : Center(
-                                    child: Text((state as ErrorState).message)),
+                                    child: Text((state as ErrorState).message),
+                                  ),
                       ),
                     )
                   ],
@@ -183,7 +180,7 @@ class HomeContent extends StatelessWidget {
               )
             ],
           ),
-          // bottomNavigationBar: BottomNavigationBar(items: const []),
+          bottomNavigationBar: const NavBar(currentIndex: 0),
         );
       });
 

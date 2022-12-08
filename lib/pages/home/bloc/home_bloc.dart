@@ -8,11 +8,11 @@ import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_alcoholic.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dart';
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
+import 'package:drink_it/pages/home/bloc/home_event.dart';
+import 'package:drink_it/pages/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
-import 'package:drink_it/pages/home/home_event.dart';
-import 'package:drink_it/pages/home/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetDetails getDetails;
