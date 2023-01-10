@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-AppBar buildAppBar(BuildContext context,
-        {List<Widget>? actions, Widget? leading}) =>
+AppBar buildAppBar(
+  BuildContext context, {
+  List<Widget>? actions,
+  Widget? leading,
+}) =>
     AppBar(
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
@@ -9,7 +12,7 @@ AppBar buildAppBar(BuildContext context,
       shadowColor: Colors.transparent,
       actions: actions,
       title: const Text(
-        'Hello Jhon',
+        'Drink.it',
         style: TextStyle(color: Colors.black54),
       ),
     );
