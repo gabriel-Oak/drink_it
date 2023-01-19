@@ -59,7 +59,7 @@ class DetailContent extends StatelessWidget {
                                       horizontal: 4,
                                     ),
                                     constraints: BoxConstraints.loose(
-                                        const Size(160, 200)),
+                                        const Size(220, 200)),
                                     child: Text(
                                       state.cocktail.name,
                                       maxLines: 2,
