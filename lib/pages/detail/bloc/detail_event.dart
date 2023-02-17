@@ -1,4 +1,4 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 
 abstract class DetailEvent {}
 

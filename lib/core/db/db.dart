@@ -22,7 +22,7 @@ class DbImpl extends Db {
   @override
   Future<Database> get() async {
     final String databasesPath = await getDatabasesPath();
-    final String path = p.join(databasesPath, 'pokidex_1');
+    final String path = p.join(databasesPath, 'drink_it');
     final db = await openDatabase(
       path,
       version: 1,

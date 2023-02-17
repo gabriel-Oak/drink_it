@@ -2,14 +2,14 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/db/scripts/cocktails_table.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class CocktailLocalDatasource {
   Future<Cocktail> lookupRandom();
   Future<Cocktail> getDetails(String id);
   Future<int> save(Cocktail cocktail);
-  Future<List<CocktailItem>> getCocktails({
+  Future<List<Cocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
@@ -22,7 +22,7 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
   CocktailLocalDatasourceImpl({required this.db});
 
   @override
-  Future<List<CocktailItem>> getCocktails({
+  Future<List<Cocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,

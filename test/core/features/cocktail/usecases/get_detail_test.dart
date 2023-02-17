@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
 import 'package:drink_it/core/utils/network_info.dart';
 import 'package:flutter_test/flutter_test.dart';

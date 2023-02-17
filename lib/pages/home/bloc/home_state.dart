@@ -1,5 +1,5 @@
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:equatable/equatable.dart';
 
 enum SearchMode {

@@ -11,8 +11,7 @@ import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datas
     as _i3;
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart'
     as _i5;
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart'
-    as _i2;
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart' as _i2;
 import 'package:drink_it/core/utils/network_info.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 

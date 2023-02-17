@@ -5,7 +5,7 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

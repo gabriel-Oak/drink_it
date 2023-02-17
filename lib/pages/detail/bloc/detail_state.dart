@@ -1,4 +1,4 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:equatable/equatable.dart';
 
 class DetailState extends Equatable {

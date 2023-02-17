@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
 import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart';
 import 'package:drink_it/core/features/cocktail/usecases/seach_by_alcoholic.dart';

@@ -1,4 +1,4 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
 import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:drink_it/pages/home/bloc/home_state.dart';

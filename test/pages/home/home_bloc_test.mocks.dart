@@ -9,8 +9,7 @@ import 'package:dartz/dartz.dart' as _i2;
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart' as _i5;
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart'
     as _i6;
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart'
-    as _i10;
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart' as _i10;
 import 'package:drink_it/core/features/cocktail/usecases/get_details.dart'
     as _i9;
 import 'package:drink_it/core/features/cocktail/usecases/lookup_random.dart'

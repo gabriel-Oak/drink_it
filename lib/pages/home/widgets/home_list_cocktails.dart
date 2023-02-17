@@ -1,5 +1,5 @@
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/models/cocktail.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletons/skeletons.dart';

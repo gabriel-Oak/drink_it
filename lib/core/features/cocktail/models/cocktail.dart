@@ -1,4 +1,5 @@
-import 'package:drink_it/core/features/cocktail/models/ingredient_model.dart';
+import 'package:drink_it/core/features/cocktail/models/ingredient.dart';
+import 'package:drink_it/core/features/cocktail/models/measure.dart';
 
 class Cocktail {
   final String id;
@@ -6,7 +7,7 @@ class Cocktail {
   final String thumb;
   final String alcoholic;
   final String glass;
-  final List<Ingredient> ingredients;
+  final List<Measure> measures;
   final String? category;
   final String? video;
   final String? tags;
@@ -15,6 +16,7 @@ class Cocktail {
   final String? instructionsDE;
   final String? instructionsFR;
   final String? instructionsIT;
+  final String? instructionsPtBR;
   final String? dateModified;
   final String? iba;
 
@@ -24,7 +26,7 @@ class Cocktail {
     required this.thumb,
     required this.alcoholic,
     required this.glass,
-    required this.ingredients,
+    required this.measures,
     this.category,
     this.video,
     this.tags,
@@ -33,38 +35,30 @@ class Cocktail {
     this.instructionsDE,
     this.instructionsFR,
     this.instructionsIT,
+    this.instructionsPtBR,
     this.dateModified,
     this.iba,
   });
 
   static Cocktail fromMap(Map<String, dynamic> map) {
-    final List<Ingredient> ingredients = [];
-    map.forEach((key, value) {
-      if (key.contains('Ingredient') && map[key] != null) {
-        ingredients.add(Ingredient(
-          name: value,
-          measure: map['strMeasure${key.split('Ingredient').last}'],
-        ));
-      }
-    });
-
+    // final List<Ingredient> measures = (map['measures'] as List<Map<String, dynamic>>).map((key, value) => null);
     return Cocktail(
-      id: map['idDrink'],
-      name: map['strDrink'],
-      thumb: map['strDrinkThumb'],
-      tags: map['strTags'],
-      category: map['strCategory'],
-      alcoholic: map['strAlcoholic'],
-      glass: map['strGlass'],
-      ingredients: ingredients,
-      video: map['strVideo'],
-      instructions: map['strInstructions'],
-      instructionsES: map['strInstructionsES'],
-      instructionsDE: map['strInstructionsDE'],
-      instructionsFR: map['strInstructionsFR'],
-      instructionsIT: map['strInstructionsIT'],
+      id: map['id'],
+      name: map['name'],
+      thumb: map['thumb'],
+      tags: map['tags'],
+      category: map['category'],
+      alcoholic: map['alcoholic'],
+      glass: map['glass'],
+      video: map['video'],
+      instructions: map['instructions'],
+      instructionsES: map['instructionsES'],
+      instructionsDE: map['instructionsDE'],
+      instructionsFR: map['instructionsFR'],
+      instructionsIT: map['instructionsIT'],
+      instructionsPtBR: map['instructionsPtBR'],
       dateModified: map['dateModified'],
-      iba: map['strIBA'],
+      iba: map['iba'],
     );
   }
 
@@ -88,7 +82,7 @@ class Cocktail {
     };
 
     for (var i = 1; i <= 15; i++) {
-      final isInRange = ingredients.length > i;
+      final isInRange = measures.length > i;
       map['strIngredient$i'] = isInRange ? ingredients[i - 1].name : null;
       map['strMeasure$i'] = isInRange ? ingredients[i - 1].measure : null;
     }
