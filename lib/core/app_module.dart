@@ -13,47 +13,23 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [
-        // Globals
-        Bind.singleton((i) => cocktailClient),
-        Bind.singleton((i) => DbImpl()),
-        Bind.singleton((i) => NetworkInfoImpl()),
+  void binds(i) {
+    // Globals
+    i.addSingleton(() => cocktailClient);
+    i.addSingleton<Db>(DbImpl.new);
+    i.addSingleton<NetworkInfo>(NetworkInfoImpl.new);
 
-        // Cocktail Feature
-        Bind((i) => CocktailLocalDatasourceImpl(db: i())),
-        Bind((i) => CocktailExternallDatasourceImpl(client: i())),
-        Bind((i) => GetDetailImpl(
-              externalDatasource: i(),
-              localDatasource: i(),
-              network: i(),
-            )),
-        Bind((i) => SearchByAlcoholicImpl(
-              externalDatasource: i(),
-              localDatasource: i(),
-              network: i(),
-            )),
-        Bind((i) => SearchByCategoryImpl(
-              externalDatasource: i(),
-              localDatasource: i(),
-              network: i(),
-            )),
-        Bind((i) => SearchByIngredientsImpl(
-              externalDatasource: i(),
-              localDatasource: i(),
-              network: i(),
-            )),
-        Bind(
-          (i) => LookupRandomImpl(
-              externalDatasource: i(), localDatasource: i(), network: i()),
-        ),
+    // Cocktail Feature
+    i.addSingleton<CocktailLocalDatasource>(CocktailLocalDatasourceImpl.new);
+    i.addSingleton<CocktailExternalDatasource>(
+        CocktailExternallDatasourceImpl.new);
+    i.addSingleton<GetDetails>(GetDetailImpl.new);
+    i.addSingleton<SearchByAlcoholic>(SearchByAlcoholicImpl.new);
+    i.addSingleton<SearchByCategory>(SearchByCategoryImpl.new);
+    i.addSingleton<SearchByIngredients>(SearchByIngredientsImpl.new);
+    i.addSingleton<LookupRandom>(LookupRandomImpl.new);
 
-        // HomePage
-        Bind((i) => HomeBloc(
-              getDetails: i(),
-              searchByAlcoholic: i(),
-              searchByCategory: i(),
-              searchByIngredient: i(),
-              lookupRandom: i(),
-            ))
-      ];
+    // HomePage
+    i.addSingleton(HomeBloc.new);
+  }
 }
