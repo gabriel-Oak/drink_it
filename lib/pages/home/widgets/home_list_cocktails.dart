@@ -1,7 +1,9 @@
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:skeletons/skeletons.dart';
 
 class HomeListCocktails extends StatelessWidget {
@@ -33,62 +35,61 @@ class HomeListCocktails extends StatelessWidget {
             }
           },
           child: Card(
-            elevation: 4,
+            elevation: 1,
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             margin: const EdgeInsets.only(bottom: 16),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: SizedBox(
-                      height: 80,
-                      width: 80,
-                      child: Stack(children: [
-                        const SkeletonAvatar(
-                          style: SkeletonAvatarStyle(width: 80, height: 80),
-                        ),
-                        SizedBox(
-                          height: 80,
-                          width: 80,
-                          child: Image(
-                            image: NetworkImage('${cocktail.thumb}/preview'),
-                          ),
-                        ),
-                      ]),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 91,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                      topLeft: Radius.circular(8),
                     ),
+                    child: Stack(children: [
+                      const SkeletonAvatar(
+                        style: SkeletonAvatarStyle(width: 92, height: 92),
+                      ),
+                      Image(
+                        image: NetworkImage('${cocktail.thumb}/preview'),
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                        height: 92,
+                        width: 92,
+                      ),
+                    ]),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cocktail.name,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        cocktail.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          cocktailInfo?.ingredients.first.name ?? 'Unknown',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          cocktailInfo?.category ?? 'Unknow',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        cocktailInfo?.ingredients.first.name ?? 'Unknown',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        cocktailInfo?.category ?? 'Unknow',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );

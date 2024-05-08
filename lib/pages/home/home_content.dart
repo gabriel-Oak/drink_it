@@ -54,7 +54,7 @@ class HomeContent extends StatelessWidget {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      height: 200,
+                      height: 208,
                       padding: const EdgeInsets.only(
                         right: 16,
                         top: 16,
@@ -168,11 +168,9 @@ class HomeContent extends StatelessWidget {
                             : state is Loaded
                                 ? HomeListCocktails(
                                     info: (state).cocktailsInfo,
-                                    list: (state).list,
-                                  )
+                                    list: (state).list)
                                 : Center(
-                                    child: Text((state as ErrorState).message),
-                                  ),
+                                    child: Text((state as ErrorState).message)),
                       ),
                     )
                   ],

@@ -3,6 +3,7 @@ import 'package:drink_it/pages/detail/detail_page.dart';
 import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:drink_it/pages/home/bloc/home_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -57,70 +58,72 @@ class HomeRandom extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
-            Positioned(
-              left: 18,
-              top: 18,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    color: Colors.white60,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2,
-                      horizontal: 4,
-                    ),
-                    constraints: BoxConstraints.loose(const Size(160, 200)),
-                    child: Text(
-                      cocktail.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      color: Colors.white60,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 4,
+                      ),
+                      constraints: BoxConstraints.loose(const Size(200, 200)),
+                      child: Text(
+                        cocktail.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 4),
-                    color: Colors.white60,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2,
-                      horizontal: 4,
-                    ),
-                    constraints: BoxConstraints.loose(const Size(160, 200)),
-                    child: Text(
-                      cocktail.ingredients.first.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      color: Colors.white60,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 4,
+                      ),
+                      constraints: BoxConstraints.loose(const Size(160, 200)),
+                      child: Text(
+                        cocktail.ingredients.first.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 4),
-                    color: Colors.white60,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 2,
-                      horizontal: 4,
-                    ),
-                    constraints: BoxConstraints.loose(const Size(160, 200)),
-                    child: Text(
-                      cocktail.category ?? 'Unknown',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      color: Colors.white60,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 4,
+                      ),
+                      constraints: BoxConstraints.loose(const Size(160, 200)),
+                      child: Text(
+                        cocktail.category ?? 'Unknown',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
