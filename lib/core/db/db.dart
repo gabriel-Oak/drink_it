@@ -22,7 +22,7 @@ class DbImpl extends Db {
   @override
   Future<Database> get() async {
     final String databasesPath = await getDatabasesPath();
-    final String path = p.join(databasesPath, 'pokidex_1');
+    final String path = p.join(databasesPath, 'drink_it_1');
     final db = await openDatabase(
       path,
       version: 1,
@@ -53,6 +53,7 @@ class DbImpl extends Db {
     }
   }
 
+  // ignore: unused_element
   Future<void> _clear() async {
     final db = await get();
     final tables =
