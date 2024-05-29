@@ -9,10 +9,10 @@ class CocktailV2 implements JsonCodable {
   final String glass;
   final String category;
   final String instructions;
-  final String instructionsES;
-  final String instructionsDE;
-  final String instructionsFR;
-  final String instructionsIT;
+  final String? instructionsES;
+  final String? instructionsDE;
+  final String? instructionsFR;
+  final String? instructionsIT;
   final List<Measure> measures;
 
   CocktailV2({
@@ -23,10 +23,10 @@ class CocktailV2 implements JsonCodable {
     required this.glass,
     required this.category,
     required this.instructions,
-    required this.instructionsES,
-    required this.instructionsDE,
-    required this.instructionsFR,
-    required this.instructionsIT,
+    this.instructionsES,
+    this.instructionsDE,
+    this.instructionsFR,
+    this.instructionsIT,
     required this.measures,
   });
 
