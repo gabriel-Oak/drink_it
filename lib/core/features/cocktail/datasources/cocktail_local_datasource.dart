@@ -115,17 +115,14 @@ class CocktailLocalDatasourceImpl extends CocktailLocalDatasource {
       );
       if (result.isEmpty) {
         throw DatasourceError(
-            message: 'Looks like you dont have any cocktails saved');
+            message: 'Looks like you don\'t have any cocktails saved');
       }
 
       return Cocktail.fromMap(result.first);
     } on DatasourceError {
       rethrow;
     } catch (e) {
-      throw DatasourceError(
-        message: 'Error looking for a random cocktail',
-        metadata: e.toString(),
-      );
+      throw DatasourceError(metadata: e.toString());
     }
   }
 }

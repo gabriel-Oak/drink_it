@@ -93,8 +93,53 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
 
   @override
   Future<CocktailV2> lookupRandom() async {
-    // TODO: implement lookupRandom
-    throw UnimplementedError();
+    try {
+      final database = await db.get();
+      final List cocktailsResult = await database.query(
+        'cocktails_v2',
+        columns: [
+          "id",
+          "name",
+          "thumb",
+          "category",
+        ],
+        orderBy: 'RANDOM()',
+        limit: 1,
+      );
+
+      if (cocktailsResult.isEmpty) {
+        throw NoCocktailsSavedError();
+      }
+
+      return await Future(() async {
+        final List measuresJson = await database.rawQuery("""
+            select 
+              ME.measure,
+              IN.id as ingredient_id,
+              IN.name as ingredient_name
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where ME.cocktail_id = '${cocktailsResult.first['id']}';
+          """);
+
+        return CocktailV2.fromJson({
+          ...cocktailsResult.first,
+          'measures': measuresJson
+              .map((e) => {
+                    'measure': e['measure'],
+                    'ingredient': {
+                      'id': e['ingredient_id'],
+                      'name': e['ingredient_name'],
+                    }
+                  })
+              .toList()
+        });
+      });
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(metadata: e.toString());
+    }
   }
 
   @override

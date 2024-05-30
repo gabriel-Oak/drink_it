@@ -18,3 +18,8 @@ class CocktailConnectionError extends DatasourceError {
   CocktailConnectionError({super.metadata})
       : super(message: 'Oh my, we have an error contacting our service :/');
 }
+
+class NoCocktailsSavedError extends DatasourceError {
+  NoCocktailsSavedError()
+      : super(message: 'Looks like you don\'t have any cocktails saved :O');
+}

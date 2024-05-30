@@ -83,5 +83,44 @@ void main() {
       result() async => await datasource.getCocktails();
       expect(result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
     });
+
+    test('Returns a random cocktail', () async {
+      when(mockDatabase.query(
+        'cocktails_v2',
+        orderBy: 'RANDOM()',
+        limit: 1,
+        columns: argThat(isNotNull, named: 'columns'),
+      )).thenAnswer((_) async => cocktailsResultMock);
+
+      when(mockDatabase.rawQuery(any))
+          .thenAnswer((_) async => measuresResultMock);
+
+      final result = await datasource.lookupRandom();
+      expect(result, isA<CocktailV2>());
+    });
+
+    test('Returns an error when no cocktails found', () async {
+      when(mockDatabase.query(
+        'cocktails_v2',
+        orderBy: 'RANDOM()',
+        limit: 1,
+        columns: argThat(isNotNull, named: 'columns'),
+      )).thenAnswer((_) async => []);
+
+      result() async => await datasource.lookupRandom();
+      expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
+    });
+
+    test('Returns an DatasourceError on caught Exception', () async {
+      when(mockDatabase.query(
+        'cocktails_v2',
+        orderBy: 'RANDOM()',
+        limit: 1,
+        columns: argThat(isNotNull, named: 'columns'),
+      )).thenThrow(Exception());
+
+      result() async => await datasource.lookupRandom();
+      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+    });
   });
 }
