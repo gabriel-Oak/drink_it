@@ -49,23 +49,24 @@ void main() {
   });
 
   group('CocktailV2LocalDatasourceImpl', () {
-    test('Returns a list with cocktails', () async {
-      when(mockDatabase.query(
-        'cocktails_v2',
-        where: argThat(isNotNull, named: 'where'),
-        columns: argThat(isNotNull, named: 'columns'),
-      )).thenAnswer((_) async => cocktailsResultMock);
+    group('getCocktails', () {
+      test('Returns a list with cocktails', () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          where: argThat(isNotNull, named: 'where'),
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => cocktailsResultMock);
 
-      when(mockDatabase.rawQuery("""
+        when(mockDatabase.rawQuery("""
             select distinct ME.cocktail_id,
             from measures ME
             left join ingredients IN on ME.ingredient_id = IN.id
             where IN.name like '%vodka%';
           """, null)).thenAnswer((_) async => [
-            {'cocktail_id': '15346'}
-          ]);
+              {'cocktail_id': '15346'}
+            ]);
 
-      when(mockDatabase.rawQuery("""
+        when(mockDatabase.rawQuery("""
             select 
               ME.measure,
               IN.id as ingredient_id,
@@ -75,66 +76,79 @@ void main() {
             where ME.cocktail_id = '15346';
           """, null)).thenAnswer((_) async => measuresResultMock);
 
-      final result = await datasource.getCocktails(ingredient: 'vodka');
-      expect(result, isA<List<CocktailV2>>());
-    });
+        final result = await datasource.getCocktails(ingredient: 'vodka');
+        expect(result, isA<List<CocktailV2>>());
+      });
 
-    test('Returns an error when no filter param specified', () async {
-      result() async => await datasource.getCocktails();
-      expect(result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
-    });
+      test('Returns an error when no filter param specified', () async {
+        result() async => await datasource.getCocktails();
+        expect(
+            result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
+      });
 
-    test('Returns an DatasourceError on caught Exception in getCocktails',
-        () async {
-      when(mockDatabase.rawQuery("""
+      test('Returns an DatasourceError on caught Exception in getCocktails',
+          () async {
+        when(mockDatabase.rawQuery("""
             select distinct ME.cocktail_id,
             from measures ME
             left join ingredients IN on ME.ingredient_id = IN.id
             where IN.name like '%vodka%';
           """, null)).thenThrow(Exception());
 
-      result() async => await datasource.getCocktails(ingredient: 'vodka');
-      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+        result() async => await datasource.getCocktails(ingredient: 'vodka');
+        expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+      });
     });
 
-    test('Returns a random cocktail', () async {
-      when(mockDatabase.query(
-        'cocktails_v2',
-        orderBy: 'RANDOM()',
-        limit: 1,
-        columns: argThat(isNotNull, named: 'columns'),
-      )).thenAnswer((_) async => cocktailsResultMock);
+    group('lookupRandom', () {
+      test('Returns a random cocktail', () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          orderBy: 'RANDOM()',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => cocktailsResultMock);
 
-      when(mockDatabase.rawQuery(any))
-          .thenAnswer((_) async => measuresResultMock);
+        when(mockDatabase.rawQuery(any))
+            .thenAnswer((_) async => measuresResultMock);
 
-      final result = await datasource.lookupRandom();
-      expect(result, isA<CocktailV2>());
+        final result = await datasource.lookupRandom();
+        expect(result, isA<CocktailV2>());
+      });
+
+      test('Returns an error when no cocktails found', () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          orderBy: 'RANDOM()',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => []);
+
+        result() async => await datasource.lookupRandom();
+        expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
+      });
+
+      test('Returns an DatasourceError on caught Exception in lookupRandom',
+          () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          orderBy: 'RANDOM()',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenThrow(Exception());
+
+        result() async => await datasource.lookupRandom();
+        expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+      });
     });
 
-    test('Returns an error when no cocktails found', () async {
-      when(mockDatabase.query(
-        'cocktails_v2',
-        orderBy: 'RANDOM()',
-        limit: 1,
-        columns: argThat(isNotNull, named: 'columns'),
-      )).thenAnswer((_) async => []);
+    group('save', () {
+      test('Should save a cocktail', () async {
+        when(mockDatabase.insert(any, any)).thenAnswer((_) async => 1);
 
-      result() async => await datasource.lookupRandom();
-      expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
-    });
-
-    test('Returns an DatasourceError on caught Exception in lookupRandom',
-        () async {
-      when(mockDatabase.query(
-        'cocktails_v2',
-        orderBy: 'RANDOM()',
-        limit: 1,
-        columns: argThat(isNotNull, named: 'columns'),
-      )).thenThrow(Exception());
-
-      result() async => await datasource.lookupRandom();
-      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+        final result = await datasource.lookupRandom();
+        expect(result, isA<CocktailV2>());
+      });
     });
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/db/scripts/cocktails_v2_table.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
@@ -144,7 +146,49 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
 
   @override
   Future<int> save(List<CocktailV2> cocktails) async {
-    // TODO: implement save
-    throw UnimplementedError();
+    try {
+      final database = await db.get();
+      final results = await Future.wait(cocktails.map(
+        (cocktail) => database.transaction((transaction) async {
+          final result = await transaction.insert(
+            'cocktails_v2',
+            cocktail.toJson(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+
+          if (result > 0) {
+            await transaction.delete(
+              'measures',
+              where: 'cocktail_id = ${cocktail.id}',
+            );
+
+            await Future.wait(cocktail.measures.map((measure) async {
+              await transaction.insert(
+                'ingredients',
+                measure.ingredient.toJson(),
+                conflictAlgorithm: ConflictAlgorithm.replace,
+              );
+
+              await transaction.insert('measures', {
+                'measure': measure.measure,
+                'cocktail_id': cocktail.id,
+                'ingredient_id': measure.ingredient.id,
+              });
+            }));
+          }
+
+          return result;
+        }).catchError((_) => 0),
+      ));
+
+      return results.reduce((value, element) => value + element);
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(
+        metadata: e.toString(),
+        message: 'Sorry, it wasn\'t possible to find your cocktail :/',
+      );
+    }
   }
 }
