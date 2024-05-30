@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_external_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -43,22 +44,20 @@ void main() {
 
   const lookUpRandomQueryMock = {
     'getRandomCocktail': {
-      'getRandomCocktail': {
-        'id': '16485',
-        'name': 'Flaming Lamborghini',
-        'thumb':
-            'https://www.thecocktaildb.com/images/media/drink/yywpss1461866587.jpg',
-        'category': 'Cocktail',
-        'measures': [
-          {
-            'measure': '1 oz ',
-            'ingredient': {
-              'name': 'Kahlua',
-            },
+      'id': '16485',
+      'name': 'Flaming Lamborghini',
+      'thumb':
+          'https://www.thecocktaildb.com/images/media/drink/yywpss1461866587.jpg',
+      'category': 'Cocktail',
+      'measures': [
+        {
+          'measure': '1 oz ',
+          'ingredient': {
+            'name': 'Kahlua',
           },
-        ],
-      }
-    }
+        },
+      ],
+    },
   };
 
   final graphQlClientMock = MockDio();
@@ -80,19 +79,11 @@ void main() {
     });
 
     test('Returns an error when no filter param specified', () async {
-      when(graphQlClientMock.post(
-        '/',
-        data: argThat(isNotNull, named: 'data'),
-      )).thenAnswer((_) async => Response<Map<String, dynamic>>(
-          requestOptions: RequestOptions(),
-          statusCode: 200,
-          data: {'data': getCocktailsResultMock}));
-
       result() async => await datasource.getCocktails();
-      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+      expect(result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
     });
 
-    test('Returns an error when request return != 200', () async {
+    test('Returns an error when getCocktails request return != 200', () async {
       when(graphQlClientMock.post(
         '/',
         data: argThat(isNotNull, named: 'data'),
@@ -102,7 +93,7 @@ void main() {
           data: {'data': getCocktailsResultMock}));
 
       result() async => await datasource.getCocktails(ingredient: 'i');
-      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+      expect(result, throwsA(const TypeMatcher<CocktailConnectionError>()));
     });
 
     test('Returns a single random cocktail', () async {
@@ -115,7 +106,20 @@ void main() {
           data: {'data': lookUpRandomQueryMock}));
 
       final result = await datasource.lookupRandom();
-      expect(result, isA<List<CocktailV2>>());
+      expect(result, isA<ShallowCocktail>());
+    });
+
+    test('Returns an error when lookupRandom request return != 200', () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenAnswer((_) async => Response<Map<String, dynamic>>(
+          requestOptions: RequestOptions(),
+          statusCode: 400,
+          data: {'data': getCocktailsResultMock}));
+
+      result() async => await datasource.lookupRandom();
+      expect(result, throwsA(const TypeMatcher<CocktailConnectionError>()));
     });
   });
 }
