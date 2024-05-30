@@ -56,8 +56,24 @@ void main() {
         columns: argThat(isNotNull, named: 'columns'),
       )).thenAnswer((_) async => cocktailsResultMock);
 
-      when(mockDatabase.rawQuery(any))
-          .thenAnswer((_) async => measuresResultMock);
+      when(mockDatabase.rawQuery("""
+            select distinct ME.cocktail_id,
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where IN.name like '%vodka%';
+          """, null)).thenAnswer((_) async => [
+            {'cocktail_id': '15346'}
+          ]);
+
+      when(mockDatabase.rawQuery("""
+            select 
+              ME.measure,
+              IN.id as ingredient_id,
+              IN.name as ingredient_name
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where ME.cocktail_id = '15346';
+          """, null)).thenAnswer((_) async => measuresResultMock);
 
       final result = await datasource.getCocktails(ingredient: 'vodka');
       expect(result, isA<List<CocktailV2>>());

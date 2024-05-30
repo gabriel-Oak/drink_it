@@ -2,6 +2,7 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/db/scripts/cocktails_v2_table.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
+import 'package:sqflite/sqflite.dart';
 
 abstract class CocktailV2LocalDatasource {
   Future<CocktailV2> lookupRandom();
@@ -26,17 +27,26 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
   }) async {
     try {
       String query;
+      Database? database;
       if (ingredient != null) {
-        query = 'LOWER(strIngredient1) LIKE LOWER(\'%$ingredient%\')';
+        database = await db.get();
+        final List cocktailsIds = await database.rawQuery("""
+            select distinct ME.cocktail_id,
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where IN.name like '%$ingredient%';
+          """);
+        query =
+            'id in (${cocktailsIds.map((e) => "'${e['cocktail_id']}'").join(', ')})';
       } else if (category != null) {
-        query = 'LOWER(strCategory) = LOWER($category)';
+        query = 'lower(category) = lower($category)';
       } else if (alcoholic != null) {
-        query = 'LOWER(strAlcoholic) = LOWER($alcoholic)';
+        query = 'lower(alcoholic) = lower($alcoholic)';
       } else {
         throw CocktailInvalidSearchError();
       }
 
-      final database = await db.get();
+      database = database ?? await db.get();
       final List<Map<String, dynamic>> cocktailsResult = await database.query(
         'cocktails_v2',
         where: query,
@@ -45,15 +55,15 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
 
       final result = Future.wait(
         cocktailsResult.map((cocktailJson) async {
-          final List measuresJson = await database.rawQuery("""
-          select 
-            ME.measure,
-            IN.id as ingredient_id,
-            IN.name as ingredient_name
-          from measures ME
-          left join ingredients IN on ME.ingredient_id = IN.id
-          where $query and ME.cocktail_id ${cocktailJson['id']}
-        """);
+          final List measuresJson = await database!.rawQuery("""
+            select 
+              ME.measure,
+              IN.id as ingredient_id,
+              IN.name as ingredient_name
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where ME.cocktail_id = '${cocktailJson['id']}';
+          """);
 
           return CocktailV2.fromJson({
             ...cocktailJson,
