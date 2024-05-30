@@ -78,6 +78,17 @@ void main() {
       expect(result, isA<List<CocktailV2>>());
     });
 
+    test('Returns an DatasourceError on caught Exception in getCocktails',
+        () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenThrow(Exception());
+
+      result() async => await datasource.getCocktails();
+      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+    });
+
     test('Returns an error when no filter param specified', () async {
       result() async => await datasource.getCocktails();
       expect(result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
@@ -107,6 +118,17 @@ void main() {
 
       final result = await datasource.lookupRandom();
       expect(result, isA<ShallowCocktail>());
+    });
+
+    test('Returns an DatasourceError on caught Exception in lookupRandom',
+        () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenThrow(Exception());
+
+      result() async => await datasource.lookupRandom();
+      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
     });
 
     test('Returns an error when lookupRandom request return != 200', () async {

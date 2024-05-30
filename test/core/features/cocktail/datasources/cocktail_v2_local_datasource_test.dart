@@ -84,6 +84,19 @@ void main() {
       expect(result, throwsA(const TypeMatcher<CocktailInvalidSearchError>()));
     });
 
+    test('Returns an DatasourceError on caught Exception in getCocktails',
+        () async {
+      when(mockDatabase.rawQuery("""
+            select distinct ME.cocktail_id,
+            from measures ME
+            left join ingredients IN on ME.ingredient_id = IN.id
+            where IN.name like '%vodka%';
+          """, null)).thenThrow(Exception());
+
+      result() async => await datasource.getCocktails(ingredient: 'vodka');
+      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+    });
+
     test('Returns a random cocktail', () async {
       when(mockDatabase.query(
         'cocktails_v2',
@@ -111,7 +124,8 @@ void main() {
       expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
     });
 
-    test('Returns an DatasourceError on caught Exception', () async {
+    test('Returns an DatasourceError on caught Exception in lookupRandom',
+        () async {
       when(mockDatabase.query(
         'cocktails_v2',
         orderBy: 'RANDOM()',
