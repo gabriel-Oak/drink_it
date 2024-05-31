@@ -4,10 +4,11 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/db/scripts/cocktails_v2_table.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class CocktailV2LocalDatasource {
-  Future<CocktailV2> lookupRandom();
+  Future<ShallowCocktail> lookupRandom();
   Future<int> save(List<CocktailV2> cocktails);
   Future<List<CocktailV2>> getCocktails({
     String? ingredient,
@@ -94,7 +95,7 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
   }
 
   @override
-  Future<CocktailV2> lookupRandom() async {
+  Future<ShallowCocktail> lookupRandom() async {
     try {
       final database = await db.get();
       final List cocktailsResult = await database.query(
@@ -124,7 +125,7 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
             where ME.cocktail_id = '${cocktailsResult.first['id']}';
           """);
 
-        return CocktailV2.fromJson({
+        return ShallowCocktail.fromJson({
           ...cocktailsResult.first,
           'measures': measuresJson
               .map((e) => {

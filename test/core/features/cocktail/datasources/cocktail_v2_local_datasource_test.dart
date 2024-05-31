@@ -2,11 +2,13 @@ import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../cocktail.mock.dart';
 import 'cocktail_v2_local_datasource_test.mocks.dart';
 
 @GenerateMocks([Db, Database])
@@ -16,25 +18,7 @@ void main() {
   final CocktailV2LocalDatasource datasource =
       CocktailV2LocalDatasourceImpl(db: mockDb);
 
-  const cocktailsResultMock = [
-    {
-      'id': '15346',
-      'name': '155 Belmont',
-      'thumb':
-          'https://www.thecocktaildb.com/images/media/drink/yqvvqs1475667388.jpg',
-      'alcoholic': 'Alcoholic',
-      'glass': 'White wine glass',
-      'category': 'Cocktail',
-      'instructions':
-          'Blend with ice. Serve in a wine glass. Garnish with carrot.',
-      'instructionsES': null,
-      'instructionsDE':
-          'Mit Eis vermischen. In einem Weinglas servieren. Mit Karotte garnieren.',
-      'instructionsFR': null,
-      'instructionsIT':
-          'Miscela con ghiaccio.\rServire in un bicchiere da vino.\rGuarnire con una carota.',
-    }
-  ];
+  const cocktailsResultMock = [cocktailJsonMock];
 
   const measuresResultMock = [
     {
@@ -113,7 +97,7 @@ void main() {
             .thenAnswer((_) async => measuresResultMock);
 
         final result = await datasource.lookupRandom();
-        expect(result, isA<CocktailV2>());
+        expect(result, isA<ShallowCocktail>());
       });
 
       test('Returns an error when no cocktails found', () async {
@@ -145,9 +129,11 @@ void main() {
     group('save', () {
       test('Should save a cocktail', () async {
         when(mockDatabase.insert(any, any)).thenAnswer((_) async => 1);
+        when(mockDatabase.transaction(any)).thenAnswer((_) async => 1);
 
-        final result = await datasource.lookupRandom();
-        expect(result, isA<CocktailV2>());
+        final result =
+            await datasource.save([CocktailV2.fromJson(cocktailJsonMock)]);
+        expect(result, 1);
       });
     });
   });
