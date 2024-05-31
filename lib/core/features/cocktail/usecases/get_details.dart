@@ -4,6 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_external_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
 import 'package:drink_it/core/utils/network_info.dart';
@@ -12,12 +14,12 @@ abstract class GetDetails {
   Future<Either<FailureGetCocktails, Cocktail>> call(String cocktailId);
 }
 
-class GetDetailImpl extends GetDetails {
+class GetDetailImpl_DEPRECIATED extends GetDetails {
   final CocktailExternalDatasource externalDatasource;
   final CocktailLocalDatasource localDatasource;
   final NetworkInfo network;
 
-  GetDetailImpl({
+  GetDetailImpl_DEPRECIATED({
     required this.externalDatasource,
     required this.localDatasource,
     required this.network,

@@ -23,7 +23,7 @@ class AppModule extends Module {
     i.addSingleton<CocktailLocalDatasource>(CocktailLocalDatasourceImpl.new);
     i.addSingleton<CocktailExternalDatasource>(
         CocktailExternallDatasourceImpl.new);
-    i.addSingleton<GetDetails>(GetDetailImpl.new);
+    i.addSingleton<GetDetails>(GetDetailImpl_DEPRECIATED.new);
     i.addSingleton<SearchByAlcoholic>(SearchByAlcoholicImpl.new);
     i.addSingleton<SearchByCategory>(SearchByCategoryImpl.new);
     i.addSingleton<SearchByIngredients>(SearchByIngredientsImpl.new);

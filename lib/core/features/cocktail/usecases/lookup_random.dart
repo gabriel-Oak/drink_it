@@ -24,13 +24,13 @@ class LookupRandomImpl extends LookupRandom {
   @override
   Future<Either<FailureGetCocktails, Cocktail>> call() async {
     try {
-      final isConnectec = await network.isConnected;
-      final cocktail = isConnectec
+      final isConnected = await network.isConnected;
+      final cocktail = isConnected
           ? await externalDatasource.lookupRandom()
           : await localDatasource.lookupRandom();
 
       try {
-        if (isConnectec) localDatasource.save(cocktail);
+        if (isConnected) localDatasource.save(cocktail);
       } catch (e) {
         print(e.toString());
       }
