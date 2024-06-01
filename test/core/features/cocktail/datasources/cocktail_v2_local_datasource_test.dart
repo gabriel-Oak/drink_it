@@ -61,7 +61,7 @@ void main() {
           """, null)).thenAnswer((_) async => measuresResultMock);
 
         final result = await datasource.getCocktails(ingredient: 'vodka');
-        expect(result, isA<List<CocktailV2>>());
+        expect(result, isA<List<ShallowCocktail>>());
       });
 
       test('Returns an error when no filter param specified', () async {
@@ -134,6 +134,47 @@ void main() {
         final result =
             await datasource.save([CocktailV2.fromJson(cocktailJsonMock)]);
         expect(result, 1);
+      });
+    });
+
+    group('getDetails', () {
+      test('Should return full cocktail', () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => cocktailsResultMock);
+
+        when(mockDatabase.rawQuery(any))
+            .thenAnswer((_) async => measuresResultMock);
+
+        final result = await datasource.getDetails('15346');
+        expect(result, isA<CocktailV2>());
+      });
+
+      test('Should return an error when no cocktails found', () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => []);
+
+        result() async => await datasource.getDetails('15346');
+        expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
+      });
+
+      test('Should return an error when cocktail found has no instructions',
+          () async {
+        when(mockDatabase.query(
+          'cocktails_v2',
+          limit: 1,
+          columns: argThat(isNotNull, named: 'columns'),
+        )).thenAnswer((_) async => [
+              {...cocktailJsonMock, 'instructions': null}
+            ]);
+
+        result() async => await datasource.getDetails('15346');
+        expect(result, throwsA(const TypeMatcher<NoCocktailsSavedError>()));
       });
     });
   });

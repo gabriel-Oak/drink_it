@@ -1,20 +1,20 @@
 import 'package:dartz/dartz.dart';
-import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
-import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_external_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_local_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/utils/network_info.dart';
 
 abstract class SearchByAlcoholic {
-  Future<Either<FailureGetCocktails, List<CocktailItem>>> call(
+  Future<Either<FailureGetCocktails, List<ShallowCocktail>>> call(
     String alcoholic,
   );
 }
 
 class SearchByAlcoholicImpl extends SearchByAlcoholic {
-  final CocktailExternalDatasource externalDatasource;
-  final CocktailLocalDatasource localDatasource;
+  final CocktailV2ExternalDatasource externalDatasource;
+  final CocktailV2LocalDatasource localDatasource;
   final NetworkInfo network;
 
   SearchByAlcoholicImpl({
@@ -24,7 +24,7 @@ class SearchByAlcoholicImpl extends SearchByAlcoholic {
   });
 
   @override
-  Future<Either<FailureGetCocktails, List<CocktailItem>>> call(
+  Future<Either<FailureGetCocktails, List<ShallowCocktail>>> call(
     String alcoholic,
   ) async {
     if (alcoholic.isEmpty) return Left(InvalidSearchError());

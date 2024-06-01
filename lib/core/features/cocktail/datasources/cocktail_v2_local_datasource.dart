@@ -10,11 +10,12 @@ import 'package:sqflite/sqflite.dart';
 abstract class CocktailV2LocalDatasource {
   Future<ShallowCocktail> lookupRandom();
   Future<int> save(List<CocktailV2> cocktails);
-  Future<List<CocktailV2>> getCocktails({
+  Future<List<ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
   });
+  Future<CocktailV2> getDetails(String cocktailId);
 }
 
 class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
@@ -23,7 +24,7 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
   CocktailV2LocalDatasourceImpl({required this.db});
 
   @override
-  Future<List<CocktailV2>> getCocktails({
+  Future<List<ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
@@ -68,7 +69,7 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
             where ME.cocktail_id = '${cocktailJson['id']}';
           """);
 
-          return CocktailV2.fromJson({
+          return ShallowCocktail.fromJson({
             ...cocktailJson,
             'measures': measuresJson
                 .map((e) => {
@@ -183,6 +184,53 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
       ));
 
       return results.reduce((value, element) => value + element);
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(
+        metadata: e.toString(),
+        message: 'Sorry, it wasn\'t possible to find your cocktail :/',
+      );
+    }
+  }
+
+  @override
+  Future<CocktailV2> getDetails(String cocktailId) async {
+    try {
+      final database = await db.get();
+      final List cocktailResult = await database.query(
+        'cocktails_v2',
+        columns: cocktailsV2Columns,
+        limit: 1,
+      );
+
+      if (cocktailResult.isEmpty ||
+          cocktailResult.first?['instructions'] == null) {
+        throw NoCocktailsSavedError();
+      }
+
+      final List measuresJson = await database.rawQuery("""
+        select 
+          ME.measure,
+          IN.id as ingredient_id,
+          IN.name as ingredient_name
+        from measures ME
+        left join ingredients IN on ME.ingredient_id = IN.id
+        where ME.cocktail_id = '${cocktailResult.first['id']}';
+      """);
+
+      return CocktailV2.fromJson({
+        ...cocktailResult.first,
+        'measures': measuresJson
+            .map((e) => {
+                  'measure': e['measure'],
+                  'ingredient': {
+                    'id': e['ingredient_id'],
+                    'name': e['ingredient_name'],
+                  }
+                })
+            .toList()
+      });
     } on DatasourceError {
       rethrow;
     } catch (e) {

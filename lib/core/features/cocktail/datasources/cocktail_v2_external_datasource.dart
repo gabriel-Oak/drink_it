@@ -5,12 +5,13 @@ import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
 import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 
 abstract class CocktailV2ExternalDatasource {
-  Future<List<CocktailV2>> getCocktails({
+  Future<List<ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
   });
   Future<ShallowCocktail> lookupRandom();
+  Future<CocktailV2> getDetails(String cocktailId);
 }
 
 class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
@@ -19,7 +20,7 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
   CocktailV2ExternalDatasourceImpl({required this.graphQlClient});
 
   @override
-  Future<List<CocktailV2>> getCocktails({
+  Future<List<ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,
     String? alcoholic,
@@ -51,7 +52,7 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
 
       final list =
           (response.data!['data']['getCocktails'] as List<Map<String, dynamic>>)
-              .map(CocktailV2.fromJson)
+              .map(ShallowCocktail.fromJson)
               .toList();
       return list;
     } on DatasourceError {
@@ -78,6 +79,32 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
 
       return ShallowCocktail.fromJson(
         response.data!['data']['getRandomCocktail'],
+      );
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(metadata: e.toString());
+    }
+  }
+
+  @override
+  Future<CocktailV2> getDetails(String cocktailId) async {
+    try {
+      final response = await graphQlClient.post(
+        '/',
+        data: {
+          'operationName': 'Query',
+          'query': getCocktailDetailsQuery,
+          'variables': {'cocktailId': cocktailId},
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw CocktailConnectionError(metadata: response.data.toString());
+      }
+
+      return CocktailV2.fromJson(
+        response.data!['data']['getCocktailDetail'],
       );
     } on DatasourceError {
       rethrow;

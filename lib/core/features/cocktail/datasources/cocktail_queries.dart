@@ -31,3 +31,28 @@ const lookupRandomQuery = """
     }
   }
 """;
+
+const getCocktailDetailsQuery = """
+  query GetCocktailDetail(\$cocktailId: String!) {
+    getCocktailDetail(cocktailId: \$cocktailId) {
+      id
+      name
+      thumb
+      alcoholic
+      glass
+      category
+      instructions
+      instructionsES
+      instructionsDE
+      instructionsFR
+      instructionsIT
+      measures {
+        measure
+        ingredient {
+          id
+          name
+        }
+      }
+    }
+  }
+""";

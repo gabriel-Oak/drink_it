@@ -12,7 +12,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../cocktail.mock.dart';
-import 'lookup_random.mocks.dart';
+import 'lookup_random_test.mocks.dart';
 
 @GenerateMocks([
   CocktailV2LocalDatasource,

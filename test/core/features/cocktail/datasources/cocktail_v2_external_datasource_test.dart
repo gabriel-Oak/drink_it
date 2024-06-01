@@ -20,6 +20,10 @@ void main() {
     'getRandomCocktail': cocktailJsonMock,
   };
 
+  const getDetailsResultMock = {
+    'getCocktailDetail': cocktailJsonMock,
+  };
+
   final graphQlClientMock = MockDio();
   final CocktailV2ExternalDatasource datasource =
       CocktailV2ExternalDatasourceImpl(graphQlClient: graphQlClientMock);
@@ -36,7 +40,7 @@ void main() {
             data: {'data': getCocktailsResultMock}));
 
         final result = await datasource.getCocktails(ingredient: 'vodka');
-        expect(result, isA<List<CocktailV2>>());
+        expect(result, isA<List<ShallowCocktail>>());
       });
 
       test('Returns an DatasourceError on caught Exception in getCocktails',
@@ -109,6 +113,45 @@ void main() {
         result() async => await datasource.lookupRandom();
         expect(result, throwsA(const TypeMatcher<CocktailConnectionError>()));
       });
+    });
+  });
+
+  group('getDetails', () {
+    test('Returns cocktail details', () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenAnswer((_) async => Response<Map<String, dynamic>>(
+          requestOptions: RequestOptions(),
+          statusCode: 200,
+          data: {'data': getDetailsResultMock}));
+
+      final result = await datasource.getDetails('15346');
+      expect(result, isA<CocktailV2>());
+    });
+
+    test('Returns an DatasourceError on caught Exception in getDetails',
+        () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenThrow(Exception());
+
+      result() async => await datasource.getDetails('15346');
+      expect(result, throwsA(const TypeMatcher<DatasourceError>()));
+    });
+
+    test('Returns an error when getDetails request return != 200', () async {
+      when(graphQlClientMock.post(
+        '/',
+        data: argThat(isNotNull, named: 'data'),
+      )).thenAnswer((_) async => Response<Map<String, dynamic>>(
+          requestOptions: RequestOptions(),
+          statusCode: 400,
+          data: {'data': getDetailsResultMock}));
+
+      result() async => await datasource.getDetails('15346');
+      expect(result, throwsA(const TypeMatcher<CocktailConnectionError>()));
     });
   });
 }
