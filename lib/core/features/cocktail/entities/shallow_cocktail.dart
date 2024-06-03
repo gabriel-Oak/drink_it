@@ -28,7 +28,7 @@ class ShallowCocktail implements JsonCodable {
   }
 
   static ShallowCocktail fromJson(Map<String, dynamic> json) {
-    final List<Map<String, dynamic>> measuresJson = json['measures'];
+    final measuresJson = List<Map<String, dynamic>>.from(json['measures']);
     return ShallowCocktail(
       id: json['id'],
       name: json['name'],

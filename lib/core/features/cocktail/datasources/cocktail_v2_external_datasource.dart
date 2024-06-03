@@ -40,7 +40,6 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
       final response = await graphQlClient.post<Map<String, dynamic>>(
         '/',
         data: {
-          'operationName': 'Query',
           'variables': {'query': queryParameter},
           'query': getCocktailsQuery
         },
@@ -50,10 +49,9 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
         throw CocktailConnectionError(metadata: response.data.toString());
       }
 
-      final list =
-          (response.data!['data']['getCocktails'] as List<Map<String, dynamic>>)
-              .map(ShallowCocktail.fromJson)
-              .toList();
+      final list = List<Map<String, dynamic>>.from(
+        response.data!['data']['getCocktails'],
+      ).map(ShallowCocktail.fromJson).toList();
       return list;
     } on DatasourceError {
       rethrow;
@@ -68,8 +66,8 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
       final response = await graphQlClient.post(
         '/',
         data: {
-          'operationName': 'Query',
-          'query': getCocktailsQuery,
+          // 'operationName': 'Query',
+          'query': lookupRandomQuery,
         },
       );
 

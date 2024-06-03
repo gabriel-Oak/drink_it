@@ -1,19 +1,14 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:skeletons/skeletons.dart';
 
 class HomeListCocktails extends StatelessWidget {
-  final List<CocktailItem> list;
-  final Map<String, Cocktail?> info;
+  final List<ShallowCocktail> list;
 
   const HomeListCocktails({
     super.key,
     required this.list,
-    required this.info,
   });
 
   @override
@@ -24,16 +19,11 @@ class HomeListCocktails extends StatelessWidget {
       itemCount: list.length,
       itemBuilder: (context, index) {
         final cocktail = list[index];
-        final cocktailInfo = info[cocktail.id];
 
         return GestureDetector(
-          onTap: () {
-            if (cocktailInfo != null) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => DetailPage(cocktail: cocktailInfo),
-              ));
-            }
-          },
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => DetailPage(cocktail: cocktail),
+          )),
           child: Card(
             elevation: 1,
             shape:
@@ -77,13 +67,15 @@ class HomeListCocktails extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        cocktailInfo?.ingredients.first.name ?? 'Unknown',
+                        cocktail.measures.isNotEmpty
+                            ? cocktail.measures.first.ingredient.name
+                            : 'Unknown',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 14),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        cocktailInfo?.category ?? 'Unknow',
+                        cocktail.category,
                         style: const TextStyle(fontSize: 14),
                       ),
                     ],

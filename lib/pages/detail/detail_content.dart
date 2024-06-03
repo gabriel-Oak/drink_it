@@ -82,7 +82,8 @@ class DetailContent extends StatelessWidget {
                                     constraints: BoxConstraints.loose(
                                         const Size(160, 200)),
                                     child: Text(
-                                      state.cocktail.ingredients.first.name,
+                                      state.cocktail.measures.first.ingredient
+                                          .name,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: true,

@@ -1,5 +1,5 @@
 const getCocktailsQuery = """
-  "query GetCocktails(\$query: CocktailQuery!) {
+  query GetCocktails(\$query: CocktailQuery!) {
     getCocktails(query: \$query) {
       id
       name

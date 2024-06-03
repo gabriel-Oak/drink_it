@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DetailBloc extends Bloc<DetailEvent, DetailState> {
   DetailBloc() : super(DetailState()) {
     on<DetailStarted>((event, emit) {
-      emit(DetailLoaded(cocktail: event.cocktail));
+      emit(DetailLoading(cocktail: event.cocktail));
     });
   }
 }
