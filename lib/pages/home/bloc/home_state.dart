@@ -1,5 +1,4 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:equatable/equatable.dart';
 
 enum SearchMode {
@@ -27,37 +26,29 @@ class LoadingList extends HomeState {
 }
 
 class Loaded extends HomeState {
-  final List<CocktailItem> list;
-  final Map<String, Cocktail?> cocktailsInfo;
-  final Map<String, bool?> loadingInfo;
+  final List<ShallowCocktail> list;
   final SearchMode searchMode;
   final String selectedFilter;
-  final Cocktail? randomLookup;
+  final ShallowCocktail? randomLookup;
   final String? message;
 
   Loaded({
     required this.list,
-    required this.cocktailsInfo,
     required this.searchMode,
     required this.selectedFilter,
     this.randomLookup,
-    this.loadingInfo = const {},
     this.message,
   });
 
   Loaded copyWith({
-    List<CocktailItem>? list,
-    Map<String, Cocktail?>? cocktailsInfo,
-    Map<String, bool?>? loadingInfo,
+    List<ShallowCocktail>? list,
     SearchMode? searchMode,
     String? selectedFilter,
-    Cocktail? randomLookup,
+    ShallowCocktail? randomLookup,
     String? message,
   }) =>
       Loaded(
         list: list ?? this.list,
-        cocktailsInfo: cocktailsInfo ?? this.cocktailsInfo,
-        loadingInfo: loadingInfo ?? this.loadingInfo,
         searchMode: searchMode ?? this.searchMode,
         selectedFilter: selectedFilter ?? this.selectedFilter,
         randomLookup: randomLookup ?? this.randomLookup,
@@ -67,8 +58,6 @@ class Loaded extends HomeState {
   @override
   List<Object?> get props => [
         list,
-        cocktailsInfo,
-        loadingInfo,
         selectedFilter,
         randomLookup,
         message,
@@ -79,7 +68,7 @@ class ErrorState extends HomeState {
   final String message;
   final SearchMode searchMode;
   final String selectedFilter;
-  final Cocktail? randomLookup;
+  final ShallowCocktail? randomLookup;
 
   ErrorState({
     required this.searchMode,
