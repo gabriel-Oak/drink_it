@@ -31,7 +31,7 @@ class CocktailV2 implements JsonCodable {
   });
 
   @override
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
@@ -49,7 +49,9 @@ class CocktailV2 implements JsonCodable {
   }
 
   static CocktailV2 fromJson(Map<String, dynamic> json) {
-    final List<Map<String, dynamic>> measuresJson = json['measures'];
+    final List<Map<String, dynamic>> measuresJson =
+        List<Map<String, dynamic>>.from(json['measures']);
+
     return CocktailV2(
       id: json['id'],
       name: json['name'],

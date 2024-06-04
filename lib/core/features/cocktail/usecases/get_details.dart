@@ -2,18 +2,19 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
-import 'package:drink_it/core/features/cocktail/datasources/cocktail_external_datasource.dart';
-import 'package:drink_it/core/features/cocktail/datasources/cocktail_local_datasource.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_external_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_local_datasource.dart';
+import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
+import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
 import 'package:drink_it/core/utils/network_info.dart';
 
 abstract class GetDetails {
-  Future<Either<FailureGetCocktails, Cocktail>> call(String cocktailId);
+  Future<Either<FailureGetCocktails, CocktailV2>> call(String cocktailId);
 }
 
 class GetDetailImpl extends GetDetails {
-  final CocktailExternalDatasource externalDatasource;
-  final CocktailLocalDatasource localDatasource;
+  final CocktailV2ExternalDatasource externalDatasource;
+  final CocktailV2LocalDatasource localDatasource;
   final NetworkInfo network;
 
   GetDetailImpl({
@@ -23,7 +24,9 @@ class GetDetailImpl extends GetDetails {
   });
 
   @override
-  Future<Either<FailureGetCocktails, Cocktail>> call(String cocktailId) async {
+  Future<Either<FailureGetCocktails, CocktailV2>> call(
+    String cocktailId,
+  ) async {
     if (cocktailId.isEmpty) return Left(InvalidSearchError());
     try {
       final details = await localDatasource.getDetails(cocktailId);
@@ -38,11 +41,8 @@ class GetDetailImpl extends GetDetails {
 
         final details = await externalDatasource.getDetails(cocktailId);
 
-        try {
-          localDatasource.save(details);
-        } catch (e) {
-          print(e.toString());
-        }
+        // ignore: invalid_return_type_for_catch_error
+        localDatasource.save([details]).catchError(print);
 
         return Right(details);
       } on DatasourceError catch (e) {

@@ -1,5 +1,5 @@
 const getCocktailsQuery = """
-  "query GetCocktails(\$query: CocktailQuery!) {
+  query GetCocktails(\$query: CocktailQuery!) {
     getCocktails(query: \$query) {
       id
       name
@@ -25,6 +25,31 @@ const lookupRandomQuery = """
       measures {
         measure
         ingredient {
+          name
+        }
+      }
+    }
+  }
+""";
+
+const getCocktailDetailsQuery = """
+  query GetCocktailDetail(\$cocktailId: String!) {
+    getCocktailDetail(cocktailId: \$cocktailId) {
+      id
+      name
+      thumb
+      alcoholic
+      glass
+      category
+      instructions
+      instructionsES
+      instructionsDE
+      instructionsFR
+      instructionsIT
+      measures {
+        measure
+        ingredient {
+          id
           name
         }
       }

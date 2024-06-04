@@ -1,9 +1,8 @@
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
 import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:drink_it/pages/home/bloc/home_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -37,7 +36,7 @@ class HomeRandom extends StatelessWidget {
     });
   }
 
-  Widget _buildCard(BuildContext context, Cocktail cocktail) {
+  Widget _buildCard(BuildContext context, ShallowCocktail cocktail) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -93,7 +92,9 @@ class HomeRandom extends StatelessWidget {
                       ),
                       constraints: BoxConstraints.loose(const Size(160, 200)),
                       child: Text(
-                        cocktail.ingredients.first.name,
+                        cocktail.measures.isNotEmpty
+                            ? cocktail.measures.first.ingredient.name
+                            : 'Unknown',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,
@@ -112,7 +113,7 @@ class HomeRandom extends StatelessWidget {
                       ),
                       constraints: BoxConstraints.loose(const Size(160, 200)),
                       child: Text(
-                        cocktail.category ?? 'Unknown',
+                        cocktail.category,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,

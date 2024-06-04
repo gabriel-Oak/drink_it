@@ -1,3 +1,5 @@
+import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
+import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/core/widgets/build_appbar.dart';
 import 'package:drink_it/pages/detail/bloc/detail_bloc.dart';
 import 'package:drink_it/pages/detail/bloc/detail_state.dart';
@@ -12,19 +14,20 @@ class DetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DetailBloc, DetailState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: buildAppBar(
-            context,
-            leading: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.black54,
-              ),
-            ),
-          ),
-          body: state is DetailLoaded
-              ? Column(
+        return state is DetailInitialState
+            ? const Center(child: CircularProgressIndicator())
+            : Scaffold(
+                appBar: buildAppBar(
+                  context,
+                  leading: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
@@ -41,7 +44,7 @@ class DetailContent extends StatelessWidget {
                             ),
                             Image(
                               image: NetworkImage(
-                                  '${state.cocktail.thumb}/preview'),
+                                  '${_getShallowCocktail(state)?.thumb}/preview'),
                               width: double.infinity,
                               height: 220,
                               fit: BoxFit.cover,
@@ -61,7 +64,8 @@ class DetailContent extends StatelessWidget {
                                     constraints: BoxConstraints.loose(
                                         const Size(220, 200)),
                                     child: Text(
-                                      state.cocktail.name,
+                                      _getShallowCocktail(state)?.name ??
+                                          'Unknown',
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: true,
@@ -82,7 +86,12 @@ class DetailContent extends StatelessWidget {
                                     constraints: BoxConstraints.loose(
                                         const Size(160, 200)),
                                     child: Text(
-                                      state.cocktail.ingredients.first.name,
+                                      _getShallowCocktail(state)
+                                              ?.measures
+                                              .first
+                                              .ingredient
+                                              .name ??
+                                          'Unknown',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: true,
@@ -102,7 +111,8 @@ class DetailContent extends StatelessWidget {
                                     constraints: BoxConstraints.loose(
                                         const Size(160, 200)),
                                     child: Text(
-                                      state.cocktail.category ?? 'Unknown',
+                                      _getShallowCocktail(state)?.category ??
+                                          'Unknown',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: true,
@@ -196,7 +206,8 @@ class DetailContent extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    state.cocktail.instructions ?? '',
+                                    _getCocktail(state)?.instructions ??
+                                        'Unknown',
                                     softWrap: true,
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
@@ -212,10 +223,21 @@ class DetailContent extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
-              : const Center(child: CircularProgressIndicator()),
-        );
+                ),
+              );
       },
     );
   }
+
+  ShallowCocktail? _getShallowCocktail(dynamic state) =>
+      state is DetailLoadingFailed
+          ? state.cocktail
+          : state is DetailLoading
+              ? state.cocktail
+              : state is DetailLoaded
+                  ? ShallowCocktail.fromJson(state.cocktail.toJson())
+                  : null;
+
+  CocktailV2? _getCocktail(dynamic state) =>
+      state is DetailLoaded ? state.cocktail : null;
 }
