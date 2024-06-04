@@ -137,6 +137,17 @@ void main() {
       });
     });
 
+    group('saveShallow', () {
+      test('Should save a shallow cocktail', () async {
+        when(mockDatabase.insert(any, any)).thenAnswer((_) async => 1);
+        when(mockDatabase.transaction(any)).thenAnswer((_) async => 1);
+
+        final result = await datasource
+            .saveShallow([ShallowCocktail.fromJson(cocktailJsonMock)]);
+        expect(result, 1);
+      });
+    });
+
     group('getDetails', () {
       test('Should return full cocktail', () async {
         when(mockDatabase.query(
