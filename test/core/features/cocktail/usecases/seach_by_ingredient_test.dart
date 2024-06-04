@@ -28,11 +28,15 @@ void main() {
     externalDatasource: externalDatasourceMock,
   );
 
+  final shallowMock = ShallowCocktail.fromJson(cocktailJsonMock);
+
   group('SearchByIngredientsImpl tests', () {
     test('Should return list of cocktails externally', () async {
       when(networkInfoMock.isConnected).thenAnswer((_) async => true);
-      when(externalDatasourceMock.getCocktails(ingredient: 'vodka')).thenAnswer(
-          (_) async => [ShallowCocktail.fromJson(cocktailJsonMock)]);
+      when(externalDatasourceMock.getCocktails(ingredient: 'vodka'))
+          .thenAnswer((_) async => [shallowMock]);
+      when(localDatasourceMock.saveShallow([shallowMock]))
+          .thenAnswer((_) async => 1);
 
       final result = await usecase('vodka');
       expect(result, isA<Right<FailureGetCocktails, List<ShallowCocktail>>>());
@@ -40,8 +44,8 @@ void main() {
 
     test('Should return list of cocktails locally', () async {
       when(networkInfoMock.isConnected).thenAnswer((_) async => false);
-      when(localDatasourceMock.getCocktails(ingredient: 'vodka')).thenAnswer(
-          (_) async => [ShallowCocktail.fromJson(cocktailJsonMock)]);
+      when(localDatasourceMock.getCocktails(ingredient: 'vodka'))
+          .thenAnswer((_) async => [shallowMock]);
 
       final result = await usecase('vodka');
       expect(result, isA<Right<FailureGetCocktails, List<ShallowCocktail>>>());

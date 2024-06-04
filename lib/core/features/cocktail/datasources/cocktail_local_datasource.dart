@@ -1,6 +1,5 @@
 import 'package:drink_it/core/db/db.dart';
 import 'package:drink_it/core/db/scripts/cocktails_table.dart';
-import 'package:drink_it/core/features/cocktail/cocktail_errors.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_item_model.dart';
 import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';

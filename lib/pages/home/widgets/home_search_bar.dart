@@ -18,7 +18,7 @@ class HomeSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         reverse: true,
@@ -206,25 +206,31 @@ class HomeSearchBar extends StatelessWidget {
             Ink(
               padding: const EdgeInsets.all(10),
               decoration: ShapeDecoration(
-                color: isActive ? Colors.red[400] : Colors.red[100],
+                color: isActive
+                    ? Theme.of(context).primaryColor
+                    : HSLColor.fromColor(Theme.of(context).primaryColor)
+                        .withLightness(0.83)
+                        .toColor(),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
                 icon: FaIcon(
                   icon,
-                  color: isActive ? Colors.white : Colors.black54,
+                  color: isActive ? Colors.white : Colors.black38,
                 ),
                 color: Colors.white,
                 onPressed: isActive ? () {} : onPressed,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: isActive ? () {} : onPressed,
               child: Text(
                 title,
                 style: TextStyle(
-                  color: isActive ? Colors.red[400] : Colors.black87,
+                  color: isActive
+                      ? Theme.of(context).primaryColor
+                      : Colors.black38,
                   fontWeight: FontWeight.bold,
                 ),
               ),

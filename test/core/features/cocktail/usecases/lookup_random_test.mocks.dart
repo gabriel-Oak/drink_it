@@ -85,6 +85,16 @@ class MockCocktailV2LocalDatasource extends _i1.Mock
       ) as _i5.Future<int>);
 
   @override
+  _i5.Future<int> saveShallow(List<_i2.ShallowCocktail>? cocktails) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveShallow,
+          [cocktails],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+
+  @override
   _i5.Future<List<_i2.ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,

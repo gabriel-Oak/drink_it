@@ -9,28 +9,21 @@ import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dar
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
 import 'package:drink_it/core/utils/cocktail_client.dart';
 import 'package:drink_it/core/utils/network_info.dart';
-import 'package:drink_it/pages/detail/bloc/detail_bloc.dart';
-import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt container = GetIt.instance;
 
 void setupContainer() {
   // Globals
-  container.registerFactory<Dio>(() {
-    print('dio');
-    return graphQLClient;
-  });
+  container.registerFactory<Dio>(() => graphQLClient);
   container.registerSingleton<Db>(DbImpl());
   container.registerSingleton<NetworkInfo>(NetworkInfoImpl());
 
   // Cocktail Feature
   container.registerLazySingleton<CocktailV2LocalDatasource>(
       () => CocktailV2LocalDatasourceImpl(db: container<Db>()));
-  container.registerLazySingleton<CocktailV2ExternalDatasource>(() {
-    print('CocktailV2ExternalDatasourceImpl(graphQlClient: container<Dio>())');
-    return CocktailV2ExternalDatasourceImpl(graphQlClient: container<Dio>());
-  });
+  container.registerLazySingleton<CocktailV2ExternalDatasource>(
+      () => CocktailV2ExternalDatasourceImpl(graphQlClient: container<Dio>()));
   container.registerLazySingleton<LookupRandom>(() => LookupRandomImpl(
       externalDatasource: container<CocktailV2ExternalDatasource>(),
       localDatasource: container<CocktailV2LocalDatasource>(),

@@ -20,68 +20,85 @@ class HomeListCocktails extends StatelessWidget {
       itemBuilder: (context, index) {
         final cocktail = list[index];
 
-        return GestureDetector(
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => DetailPage(cocktail: cocktail),
-          )),
-          child: Card(
-            elevation: 1,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 91,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      topLeft: Radius.circular(8),
-                    ),
-                    child: Stack(children: [
-                      const SkeletonAvatar(
-                        style: SkeletonAvatarStyle(width: 92, height: 92),
-                      ),
-                      Image(
-                        image: NetworkImage('${cocktail.thumb}/preview'),
-                        alignment: Alignment.center,
-                        fit: BoxFit.cover,
-                        height: 92,
-                        width: 92,
-                      ),
-                    ]),
-                  ),
+        return Tooltip(
+          message: cocktail.name,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        cocktail.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DetailPage(cocktail: cocktail),
+                )),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          topLeft: Radius.circular(8),
                         ),
+                        child: Stack(children: [
+                          const SkeletonAvatar(
+                            style: SkeletonAvatarStyle(width: 100, height: 100),
+                          ),
+                          Image(
+                            image: NetworkImage('${cocktail.thumb}/preview'),
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
+                            height: 100,
+                            width: 100,
+                          ),
+                        ]),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        cocktail.measures.isNotEmpty
-                            ? cocktail.measures.first.ingredient.name
-                            : 'Unknown',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            cocktail.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            cocktail.measures.isNotEmpty
+                                ? cocktail.measures.first.ingredient.name
+                                : 'Unknown',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            cocktail.category,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black38,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        cocktail.category,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         );

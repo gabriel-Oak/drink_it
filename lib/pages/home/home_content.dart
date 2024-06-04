@@ -24,13 +24,13 @@ class HomeContent extends StatelessWidget {
 
         return Scaffold(
           appBar: buildAppBar(context),
+          backgroundColor: Colors.grey[100],
           body: BlocListener<HomeBloc, HomeState>(
             listener: (context, state) {
               if ((state is Loaded || state is ErrorState) &&
                   (state as dynamic).message != null) {
                 final snackBar =
                     SnackBar(content: Text((state as dynamic).message));
-                // SchedulerBinding
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
@@ -48,7 +48,7 @@ class HomeContent extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
-                            color: Colors.black54,
+                            color: Colors.black38,
                           ),
                         ),
                       ),
@@ -66,7 +66,7 @@ class HomeContent extends StatelessWidget {
                           left: 2,
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(8),
                           child: const HomeRandom(),
                         ),
                       ),
@@ -105,7 +105,7 @@ class HomeContent extends StatelessWidget {
                                     color: _getMode(state) ==
                                             SearchMode.ingredients
                                         ? Colors.red[400]
-                                        : Colors.black54,
+                                        : Colors.black38,
                                   ),
                                 ),
                               ),
@@ -132,7 +132,7 @@ class HomeContent extends StatelessWidget {
                                     color:
                                         _getMode(state) == SearchMode.category
                                             ? Colors.red[400]
-                                            : Colors.black54,
+                                            : Colors.black38,
                                   ),
                                 ),
                               ),
@@ -159,7 +159,7 @@ class HomeContent extends StatelessWidget {
                                     color:
                                         _getMode(state) == SearchMode.alcoholic
                                             ? Colors.red[400]
-                                            : Colors.black54,
+                                            : Colors.black38,
                                   ),
                                 ),
                               ),
@@ -175,7 +175,8 @@ class HomeContent extends StatelessWidget {
                                   ? HomeListCocktails(list: (state).list)
                                   : Center(
                                       child:
-                                          Text((state as ErrorState).message)),
+                                          Text((state as ErrorState).message),
+                                    ),
                         ),
                       )
                     ],

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print, invalid_return_type_for_catch_error
 import 'package:dartz/dartz.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_external_datasource.dart';
 import 'package:drink_it/core/features/cocktail/datasources/cocktail_v2_local_datasource.dart';
@@ -28,11 +29,21 @@ class SearchByIngredientsImpl extends SearchByIngredients {
     String ingredientName,
   ) async {
     if (ingredientName.isEmpty) return Left(InvalidSearchError());
+    List<ShallowCocktail> results;
 
     try {
-      final results = await network.isConnected
-          ? await externalDatasource.getCocktails(ingredient: ingredientName)
-          : await localDatasource.getCocktails(ingredient: ingredientName);
+      if (await network.isConnected) {
+        results = await externalDatasource
+            .getCocktails(ingredient: ingredientName)
+            .catchError((_) => <ShallowCocktail>[]);
+
+        if (results.isNotEmpty) {
+          localDatasource.saveShallow(results).catchError(print);
+          return Right(results);
+        }
+      }
+
+      results = await localDatasource.getCocktails(ingredient: ingredientName);
       return Right(results);
     } on DatasourceError catch (e) {
       return Left(e);

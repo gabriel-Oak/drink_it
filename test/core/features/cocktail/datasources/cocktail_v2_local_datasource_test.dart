@@ -44,8 +44,8 @@ void main() {
         when(mockDatabase.rawQuery("""
             select distinct ME.cocktail_id,
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
-            where IN.name like '%vodka%';
+            left join ingredients IG on ME.ingredient_id = IG.id
+            where IG.name like '%vodka%';
           """, null)).thenAnswer((_) async => [
               {'cocktail_id': '15346'}
             ]);
@@ -53,10 +53,10 @@ void main() {
         when(mockDatabase.rawQuery("""
             select 
               ME.measure,
-              IN.id as ingredient_id,
-              IN.name as ingredient_name
+              IG.id as ingredient_id,
+              IG.name as ingredient_name
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
+            left join ingredients IG on ME.ingredient_id = IG.id
             where ME.cocktail_id = '15346';
           """, null)).thenAnswer((_) async => measuresResultMock);
 
@@ -75,8 +75,8 @@ void main() {
         when(mockDatabase.rawQuery("""
             select distinct ME.cocktail_id,
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
-            where IN.name like '%vodka%';
+            left join ingredients IG on ME.ingredient_id = IG.id
+            where IG.name like '%vodka%';
           """, null)).thenThrow(Exception());
 
         result() async => await datasource.getCocktails(ingredient: 'vodka');

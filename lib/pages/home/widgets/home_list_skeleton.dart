@@ -11,7 +11,9 @@ class HomeListSkeleton extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: 50,
       itemBuilder: (context, index) => Card(
-        elevation: 4,
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         margin: const EdgeInsets.only(bottom: 16),
         child: SkeletonItem(
@@ -19,8 +21,8 @@ class HomeListSkeleton extends StatelessWidget {
             children: [
               const SkeletonAvatar(
                 style: SkeletonAvatarStyle(
-                  width: 92,
-                  height: 92,
+                  width: 100,
+                  height: 100,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8),
                     bottomLeft: Radius.circular(8),
