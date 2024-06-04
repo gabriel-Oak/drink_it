@@ -2,7 +2,12 @@ import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
 import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:equatable/equatable.dart';
 
-class DetailState extends Equatable {
+abstract class DetailState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class DetailInitialState extends DetailState {
   @override
   List<Object?> get props => [];
 }

@@ -11,17 +11,13 @@ import 'package:drink_it/pages/home/bloc/home_event.dart';
 import 'package:drink_it/pages/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
-
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final GetDetails getDetails;
   final SearchByAlcoholic searchByAlcoholic;
   final SearchByCategory searchByCategory;
   final SearchByIngredients searchByIngredient;
   final LookupRandom lookupRandom;
 
   HomeBloc({
-    required this.getDetails,
     required this.searchByAlcoholic,
     required this.searchByCategory,
     required this.searchByIngredient,
@@ -43,8 +39,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       selectedFilter: event.ingredient,
     ));
 
-    final random = (await lookupRandom()).fold(id, id);
-    final response = (await searchByIngredient(event.ingredient)).fold(id, id);
+    final [randomResponse, cocktailsResponse] = await Future.wait([
+      lookupRandom(),
+      searchByIngredient(event.ingredient),
+    ]);
+
+    final random = randomResponse.fold(id, id);
+    final response = cocktailsResponse.fold(id, id);
 
     emit(_buildLoadedOrError(
       list: response,
@@ -65,8 +66,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       selectedFilter: event.category,
     ));
 
-    final random = (await lookupRandom()).fold(id, id);
-    final response = (await searchByCategory(event.category)).fold(id, id);
+    final [randomResponse, cocktailsResponse] = await Future.wait([
+      lookupRandom(),
+      searchByCategory(event.category),
+    ]);
+
+    final random = randomResponse.fold(id, id);
+    final response = cocktailsResponse.fold(id, id);
 
     emit(_buildLoadedOrError(
       list: response,
@@ -87,8 +93,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       selectedFilter: event.alcoholic,
     ));
 
-    final random = (await lookupRandom()).fold(id, id);
-    final response = (await searchByAlcoholic(event.alcoholic)).fold(id, id);
+    final [randomResponse, cocktailsResponse] = await Future.wait([
+      lookupRandom(),
+      searchByAlcoholic(event.alcoholic),
+    ]);
+
+    final random = randomResponse.fold(id, id);
+    final response = cocktailsResponse.fold(id, id);
 
     emit(_buildLoadedOrError(
       list: response,

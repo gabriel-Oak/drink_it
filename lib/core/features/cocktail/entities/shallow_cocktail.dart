@@ -17,7 +17,7 @@ class ShallowCocktail implements JsonCodable {
   });
 
   @override
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,

@@ -91,7 +91,6 @@ class CocktailV2ExternalDatasourceImpl implements CocktailV2ExternalDatasource {
       final response = await graphQlClient.post(
         '/',
         data: {
-          'operationName': 'Query',
           'query': getCocktailDetailsQuery,
           'variables': {'cocktailId': cocktailId},
         },

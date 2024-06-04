@@ -1,5 +1,6 @@
+import 'package:drink_it/core/container.dart';
 import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
-import 'package:drink_it/core/features/cocktail/models/cocktail_model.dart';
+import 'package:drink_it/core/features/cocktail/usecases/get_details.dart';
 import 'package:drink_it/pages/detail/bloc/detail_bloc.dart';
 import 'package:drink_it/pages/detail/bloc/detail_event.dart';
 import 'package:drink_it/pages/detail/detail_content.dart';
@@ -13,7 +14,8 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DetailBloc>(
-      create: (context) => DetailBloc()..add(DetailStarted(cocktail: cocktail)),
+      create: (context) => DetailBloc(getDetails: container<GetDetails>())
+        ..add(DetailStarted(cocktail: cocktail)),
       child: const DetailContent(),
     );
   }

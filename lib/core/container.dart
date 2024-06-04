@@ -9,6 +9,7 @@ import 'package:drink_it/core/features/cocktail/usecases/seach_by_ingredient.dar
 import 'package:drink_it/core/features/cocktail/usecases/search_by_category.dart';
 import 'package:drink_it/core/utils/cocktail_client.dart';
 import 'package:drink_it/core/utils/network_info.dart';
+import 'package:drink_it/pages/detail/bloc/detail_bloc.dart';
 import 'package:drink_it/pages/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -52,12 +53,4 @@ void setupContainer() {
       externalDatasource: container<CocktailV2ExternalDatasource>(),
       localDatasource: container<CocktailV2LocalDatasource>(),
       network: container<NetworkInfo>()));
-
-  // Home page
-  container.registerLazySingleton<HomeBloc>(() => HomeBloc(
-      getDetails: container<GetDetails>(),
-      searchByAlcoholic: container<SearchByAlcoholic>(),
-      searchByCategory: container<SearchByCategory>(),
-      searchByIngredient: container<SearchByIngredients>(),
-      lookupRandom: container<LookupRandom>()));
 }

@@ -10,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 abstract class CocktailV2LocalDatasource {
   Future<ShallowCocktail> lookupRandom();
   Future<int> save(List<CocktailV2> cocktails);
+  Future<int> saveShallow(List<ShallowCocktail> cocktails);
   Future<List<ShallowCocktail>> getCocktails({
     String? ingredient,
     String? category,
@@ -37,8 +38,8 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
         final List cocktailsIds = await database.rawQuery("""
             select distinct ME.cocktail_id,
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
-            where IN.name like '%$ingredient%';
+            left join ingredients IG on ME.ingredient_id = IG.id
+            where IG.name like '%$ingredient%';
           """);
         query =
             'id in (${cocktailsIds.map((e) => "'${e['cocktail_id']}'").join(', ')})';
@@ -62,10 +63,10 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
           final List measuresJson = await database!.rawQuery("""
             select 
               ME.measure,
-              IN.id as ingredient_id,
-              IN.name as ingredient_name
+              IG.id as ingredient_id,
+              IG.name as ingredient_name
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
+            left join ingredients IG on ME.ingredient_id = IG.id
             where ME.cocktail_id = '${cocktailJson['id']}';
           """);
 
@@ -119,10 +120,10 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
         final List measuresJson = await database.rawQuery("""
             select 
               ME.measure,
-              IN.id as ingredient_id,
-              IN.name as ingredient_name
+              IG.id as ingredient_id,
+              IG.name as ingredient_name
             from measures ME
-            left join ingredients IN on ME.ingredient_id = IN.id
+            left join ingredients IG on ME.ingredient_id = IG.id
             where ME.cocktail_id = '${cocktailsResult.first['id']}';
           """);
 
@@ -152,9 +153,11 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
       final database = await db.get();
       final results = await Future.wait(cocktails.map(
         (cocktail) => database.transaction((transaction) async {
+          final cocktailMap = cocktail.toJson();
+          cocktailMap.remove('measures');
           final result = await transaction.insert(
             'cocktails_v2',
-            cocktail.toJson(),
+            cocktailMap,
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
@@ -171,11 +174,15 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
                 conflictAlgorithm: ConflictAlgorithm.replace,
               );
 
-              await transaction.insert('measures', {
-                'measure': measure.measure,
-                'cocktail_id': cocktail.id,
-                'ingredient_id': measure.ingredient.id,
-              });
+              await transaction.insert(
+                'measures',
+                {
+                  'measure': measure.measure,
+                  'cocktail_id': cocktail.id,
+                  'ingredient_id': measure.ingredient.id,
+                },
+                conflictAlgorithm: ConflictAlgorithm.replace,
+              );
             }));
           }
 
@@ -212,10 +219,10 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
       final List measuresJson = await database.rawQuery("""
         select 
           ME.measure,
-          IN.id as ingredient_id,
-          IN.name as ingredient_name
+          IG.id as ingredient_id,
+          IG.name as ingredient_name
         from measures ME
-        left join ingredients IN on ME.ingredient_id = IN.id
+        left join ingredients IG on ME.ingredient_id = IG.id
         where ME.cocktail_id = '${cocktailResult.first['id']}';
       """);
 
@@ -231,6 +238,60 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
                 })
             .toList()
       });
+    } on DatasourceError {
+      rethrow;
+    } catch (e) {
+      throw DatasourceError(
+        metadata: e.toString(),
+        message: 'Sorry, it wasn\'t possible to find your cocktail :/',
+      );
+    }
+  }
+
+  @override
+  Future<int> saveShallow(List<ShallowCocktail> cocktails) async {
+    try {
+      final database = await db.get();
+      final results = await Future.wait(cocktails.map(
+        (cocktail) => database.transaction((transaction) async {
+          final cocktailMap = cocktail.toJson();
+          cocktailMap.remove('measures');
+          final result = await transaction.insert(
+            'cocktails_v2',
+            cocktailMap,
+            conflictAlgorithm: ConflictAlgorithm.ignore,
+          );
+
+          if (result > 0) {
+            await transaction.delete(
+              'measures',
+              where: 'cocktail_id = ${cocktail.id}',
+            );
+
+            await Future.wait(cocktail.measures.map((measure) async {
+              await transaction.insert(
+                'ingredients',
+                measure.ingredient.toJson(),
+                conflictAlgorithm: ConflictAlgorithm.ignore,
+              );
+
+              await transaction.insert(
+                'measures',
+                {
+                  'measure': measure.measure,
+                  'cocktail_id': cocktail.id,
+                  'ingredient_id': measure.ingredient.id,
+                },
+                conflictAlgorithm: ConflictAlgorithm.ignore,
+              );
+            }));
+          }
+
+          return result;
+        }).catchError((_) => 0),
+      ));
+
+      return results.reduce((value, element) => value + element);
     } on DatasourceError {
       rethrow;
     } catch (e) {

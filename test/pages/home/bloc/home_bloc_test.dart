@@ -27,7 +27,6 @@ class MockSearchByIngredients extends Mock implements SearchByIngredients {}
 class MockLookupRandom extends Mock implements LookupRandom {}
 
 void main() {
-  final getDetailsMock = MockGetDetails();
   final searchByAlcoholicMock = MockSearchByAlcoholic();
   final searchByCategoryMock = MockSearchByCategory();
   final searchByIngredientMock = MockSearchByIngredients();
@@ -35,7 +34,6 @@ void main() {
   final shallowCocktailMock = ShallowCocktail.fromJson(cocktailJsonMock);
 
   build() => HomeBloc(
-        getDetails: getDetailsMock,
         searchByAlcoholic: searchByAlcoholicMock,
         searchByCategory: searchByCategoryMock,
         searchByIngredient: searchByIngredientMock,

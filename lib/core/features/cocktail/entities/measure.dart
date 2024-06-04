@@ -19,14 +19,6 @@ class Measure implements JsonCodable {
   }
 
   static Measure fromJson(Map<String, dynamic> json) {
-    try {
-      return Measure(
-        measure: json['measure'],
-        ingredient: Ingredient.fromJson(json['ingredient']),
-      );
-    } catch (e) {
-      print(e);
-    }
     return Measure(
       measure: json['measure'],
       ingredient: Ingredient.fromJson(json['ingredient']),
