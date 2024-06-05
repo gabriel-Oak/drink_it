@@ -2,6 +2,8 @@
 import 'package:drink_it/core/container.dart';
 import 'package:drink_it/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
+
+import 'pages/main/main_page.dart';
 // import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         primaryColor: Colors.red[400],
       ),
-      home: const HomePage(),
+      home: const MainPage(),
     );
   }
 }

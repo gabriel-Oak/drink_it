@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/pages/detail/detail_page.dart';
 import 'package:drink_it/pages/home/bloc/home_bloc.dart';
@@ -46,16 +47,23 @@ class HomeRandom extends StatelessWidget {
       child: SizedBox(
         child: Stack(
           children: [
-            const SkeletonAvatar(
-              style: SkeletonAvatarStyle(
-                width: double.infinity,
-                height: double.infinity,
-              ),
-            ),
-            Image(
-              image: NetworkImage('${cocktail.thumb}/preview'),
-              width: double.infinity,
+            CachedNetworkImage(
+              imageUrl: '${cocktail.thumb}/preview',
               fit: BoxFit.cover,
+              width: double.infinity,
+              placeholder: (context, url) => const SkeletonAvatar(
+                style: SkeletonAvatarStyle(
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(
+                  Icons.no_drinks,
+                  color: Colors.black38,
+                  size: 158,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(18),

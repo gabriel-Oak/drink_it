@@ -1,13 +1,10 @@
-import 'package:drink_it/pages/favorites/favorites_page.dart';
-import 'package:drink_it/pages/home/home_page.dart';
-import 'package:drink_it/pages/profile/profile_page.dart';
-import 'package:drink_it/pages/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NavBar extends StatelessWidget {
   final int currentIndex;
-  const NavBar({super.key, required this.currentIndex});
+  final Function(int newPageIndex) callback;
+  const NavBar({super.key, required this.currentIndex, required this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +22,7 @@ class NavBar extends StatelessWidget {
           topRight: Radius.circular(18),
         ),
         child: BottomNavigationBar(
-          onTap: (value) => _navigate(context, value),
+          onTap: callback,
           currentIndex: currentIndex,
           items: [
             BottomNavigationBarItem(
@@ -84,39 +81,5 @@ class NavBar extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _navigate(BuildContext context, int index) {
-    switch (index) {
-      case 0:
-        if (currentIndex != 0) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
-        }
-        break;
-      case 1:
-        if (currentIndex != 1) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const SearchPage(),
-          ));
-        }
-        break;
-      case 2:
-        if (currentIndex != 2) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const FavoritesPage(),
-          ));
-        }
-        break;
-      case 3:
-        if (currentIndex != 3) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const ProfilePage(),
-          ));
-        }
-        break;
-      default:
-    }
   }
 }

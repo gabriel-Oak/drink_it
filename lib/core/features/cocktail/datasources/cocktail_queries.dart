@@ -8,6 +8,7 @@ const getCocktailsQuery = """
       measures {
         measure
         ingredient {
+          id,
           name
         }
       }
@@ -25,6 +26,7 @@ const lookupRandomQuery = """
       measures {
         measure
         ingredient {
+          id,
           name
         }
       }

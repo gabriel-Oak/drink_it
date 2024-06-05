@@ -36,11 +36,15 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
       if (ingredient != null) {
         database = await db.get();
         final List cocktailsIds = await database.rawQuery("""
-            select distinct ME.cocktail_id,
+            select distinct ME.cocktail_id
             from measures ME
             left join ingredients IG on ME.ingredient_id = IG.id
-            where IG.name like '%$ingredient%';
+            where lower(IG.name) like lower('%$ingredient%');
           """);
+
+        final tttt = await database.query('ingredients');
+        print(tttt);
+
         query =
             'id in (${cocktailsIds.map((e) => "'${e['cocktail_id']}'").join(', ')})';
       } else if (category != null) {
@@ -284,11 +288,11 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
                 },
                 conflictAlgorithm: ConflictAlgorithm.ignore,
               );
-            }));
+            })).catchError(print);
           }
 
           return result;
-        }).catchError((_) => 0),
+        }).catchError(print),
       ));
 
       return results.reduce((value, element) => value + element);

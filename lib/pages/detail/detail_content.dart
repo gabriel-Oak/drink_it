@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
 import 'package:drink_it/core/features/cocktail/entities/shallow_cocktail.dart';
 import 'package:drink_it/core/widgets/build_appbar.dart';
@@ -18,6 +19,7 @@ class DetailContent extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : Scaffold(
                 appBar: buildAppBar(
+                  title: _getShallowCocktail(state)?.name,
                   context,
                   leading: IconButton(
                     onPressed: () => Navigator.of(context).pop(),
@@ -36,18 +38,26 @@ class DetailContent extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         child: Stack(
                           children: [
-                            SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                width: MediaQuery.of(context).size.width,
-                                height: 220,
-                              ),
-                            ),
-                            Image(
-                              image: NetworkImage(
-                                  '${_getShallowCocktail(state)?.thumb}/preview'),
-                              width: double.infinity,
-                              height: 220,
+                            CachedNetworkImage(
+                              imageUrl:
+                                  '${_getShallowCocktail(state)?.thumb}/preview',
                               fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width,
+                              height: 220,
+                              placeholder: (context, url) => SkeletonAvatar(
+                                style: SkeletonAvatarStyle(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 220,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(
+                                  Icons.no_drinks,
+                                  color: Colors.black38,
+                                  size: 200,
+                                ),
+                              ),
                             ),
                             Positioned(
                               left: 18,

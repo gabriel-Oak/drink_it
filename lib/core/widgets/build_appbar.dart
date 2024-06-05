@@ -4,6 +4,7 @@ AppBar buildAppBar(
   BuildContext context, {
   List<Widget>? actions,
   Widget? leading,
+  String? title = 'Drink.it',
 }) =>
     AppBar(
       backgroundColor: Colors.transparent,
@@ -11,8 +12,8 @@ AppBar buildAppBar(
       leading: leading,
       shadowColor: Colors.transparent,
       actions: actions,
-      title: const Text(
-        'Drink.it',
-        style: TextStyle(color: Colors.black54),
+      title: Text(
+        title!,
+        style: const TextStyle(color: Colors.black54),
       ),
     );

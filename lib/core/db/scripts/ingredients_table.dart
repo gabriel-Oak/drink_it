@@ -5,7 +5,7 @@ const ingredientsColumns = [
 
 const ingredientsTable = """
   CREATE TABLE ingredients(
-    id VARCHAR(36) PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY NOT NULL,
     name TEXT
   );
 """;
