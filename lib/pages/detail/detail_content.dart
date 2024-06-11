@@ -139,97 +139,144 @@ class DetailContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              RotatedBox(
-                                quarterTurns: 135,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 24,
-                                    ),
-                                    child: Text(
-                                      'Description',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.red[400],
+                    DefaultTabController(
+                      length: 3,
+                      child: Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                RotatedBox(
+                                  quarterTurns: 135,
+                                  child: GestureDetector(
+                                    onTap: () =>
+                                        DefaultTabController.of(context)
+                                            .animateTo(0),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 24,
+                                      ),
+                                      child: Text(
+                                        'Instructions',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.red[400],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              RotatedBox(
-                                quarterTurns: 135,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 24,
-                                    ),
-                                    child: const Text(
-                                      'Ingredients',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black54,
+                                RotatedBox(
+                                  quarterTurns: 135,
+                                  child: GestureDetector(
+                                    onTap: () =>
+                                        DefaultTabController.of(context)
+                                            .animateTo(1),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 24,
+                                      ),
+                                      child: const Text(
+                                        'Similar Cocktails',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black54,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              RotatedBox(
-                                quarterTurns: 135,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 24,
-                                    ),
-                                    child: const Text(
-                                      'Similar Coctails',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                        color: Colors.black54,
+                                RotatedBox(
+                                  quarterTurns: 135,
+                                  child: GestureDetector(
+                                    onTap: () =>
+                                        DefaultTabController.of(context)
+                                            .animateTo(2),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                        horizontal: 24,
+                                      ),
+                                      child: const Text(
+                                        'Reviews',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: Colors.black54,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Column(
+                              ],
+                            ),
+                            Expanded(
+                              child: TabBarView(
                                 children: [
-                                  Text(
-                                    _getCocktail(state)?.instructions ??
-                                        'Unknown',
-                                    softWrap: true,
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      height: 1.8,
+                                  SingleChildScrollView(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          _getCocktail(state)?.instructions ??
+                                              'Unknown',
+                                          softWrap: true,
+                                          textAlign: TextAlign.justify,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            height: 1.8,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SingleChildScrollView(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Unknown 1',
+                                          softWrap: true,
+                                          textAlign: TextAlign.justify,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            height: 1.8,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SingleChildScrollView(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Unknown 2',
+                                          softWrap: true,
+                                          textAlign: TextAlign.justify,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            height: 1.8,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

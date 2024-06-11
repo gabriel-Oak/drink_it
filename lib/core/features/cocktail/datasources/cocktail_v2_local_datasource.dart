@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:drink_it/core/db/db.dart';
+import 'package:drink_it/core/db/scripts/cocktails_table.dart';
 import 'package:drink_it/core/db/scripts/cocktails_v2_table.dart';
 import 'package:drink_it/core/features/cocktail/datasources/errors.dart';
 import 'package:drink_it/core/features/cocktail/entities/cocktail_v2.dart';
@@ -165,6 +166,10 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
 
+          final test = await transaction
+              .query('cocktails_v2', where: 'id = ?', whereArgs: [cocktail.id]);
+          print(test);
+
           if (result > 0) {
             await transaction.delete(
               'measures',
@@ -213,10 +218,12 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
         'cocktails_v2',
         columns: cocktailsV2Columns,
         limit: 1,
+        where: 'id = ?',
+        whereArgs: [cocktailId],
       );
+      final Map<String, dynamic>? cocktail = cocktailResult.first;
 
-      if (cocktailResult.isEmpty ||
-          cocktailResult.first?['instructions'] == null) {
+      if (cocktailResult.isEmpty || cocktail?['instructions'] == null) {
         throw NoCocktailsSavedError();
       }
 
@@ -227,11 +234,11 @@ class CocktailV2LocalDatasourceImpl implements CocktailV2LocalDatasource {
           IG.name as ingredient_name
         from measures ME
         left join ingredients IG on ME.ingredient_id = IG.id
-        where ME.cocktail_id = '${cocktailResult.first['id']}';
+        where ME.cocktail_id = '${cocktail!['id']}';
       """);
 
       return CocktailV2.fromJson({
-        ...cocktailResult.first,
+        ...cocktail,
         'measures': measuresJson
             .map((e) => {
                   'measure': e['measure'],

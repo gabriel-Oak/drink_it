@@ -204,7 +204,6 @@ class HomeSearchBar extends StatelessWidget {
         child: Column(
           children: [
             Ink(
-              padding: const EdgeInsets.all(10),
               decoration: ShapeDecoration(
                 color: isActive
                     ? Theme.of(context).primaryColor
@@ -214,9 +213,12 @@ class HomeSearchBar extends StatelessWidget {
                 shape: const CircleBorder(),
               ),
               child: IconButton(
-                icon: FaIcon(
-                  icon,
-                  color: isActive ? Colors.white : Colors.black38,
+                icon: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: FaIcon(
+                    icon,
+                    color: isActive ? Colors.white : Colors.black38,
+                  ),
                 ),
                 color: Colors.white,
                 onPressed: isActive ? () {} : onPressed,
